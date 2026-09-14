@@ -12,17 +12,17 @@ REQUIRED_COLUMNS = ["sale_date", "product", "category", "country", "quantity", "
 def prepare_sales(raw):
     missing = set(REQUIRED_COLUMNS) - set(raw.columns)
     if missing:
-        raise ValueError("Hiányzó oszlopok: " + ", ".join(sorted(missing)))
+        raise ValueError("Missing columns: " + ", ".join(sorted(missing)))
     data = raw[REQUIRED_COLUMNS].copy()
     data["sale_date"] = pd.to_datetime(data["sale_date"], errors="coerce").dt.normalize()
     for column in ("revenue", "quantity"):
         data[column] = pd.to_numeric(data[column], errors="coerce")
         if not np.isfinite(data[column]).all():
-            raise ValueError(f"Érvénytelen szám a(z) {column} oszlopban.")
+            raise ValueError(f"Invalid numeric value in column {column}.")
     if data.isna().any().any():
-        raise ValueError("Az adatok hiányzó vagy érvénytelen értékeket tartalmaznak.")
+        raise ValueError("The data contains missing or invalid values.")
     if (data["quantity"] % 1 != 0).any():
-        raise ValueError("A darabszámnak egész számnak kell lennie.")
+        raise ValueError("Quantity must be a whole number.")
     data["currency"] = "EUR"
     return data.sort_values("sale_date").reset_index(drop=True)
 
@@ -60,11 +60,11 @@ def period_comparison(data, anchor, period):
 
 def segment_comparison(current, previous, dimension):
     result = pd.concat([
-        current.groupby(dimension).revenue.sum().rename("Aktuális bevétel (EUR)"),
-        previous.groupby(dimension).revenue.sum().rename("Előző bevétel (EUR)"),
+        current.groupby(dimension).revenue.sum().rename("Current revenue (EUR)"),
+        previous.groupby(dimension).revenue.sum().rename("Previous revenue (EUR)"),
     ], axis=1).fillna(0)
-    result["Változás (EUR)"] = result["Aktuális bevétel (EUR)"] - result["Előző bevétel (EUR)"]
-    result["Változás (%)"] = (
-        result["Változás (EUR)"] / result["Előző bevétel (EUR)"].replace(0, np.nan) * 100
+    result["Change (EUR)"] = result["Current revenue (EUR)"] - result["Previous revenue (EUR)"]
+    result["Change (%)"] = (
+        result["Change (EUR)"] / result["Previous revenue (EUR)"].replace(0, np.nan) * 100
     )
-    return result.round(2).sort_values("Aktuális bevétel (EUR)", ascending=False)
+    return result.round(2).sort_values("Current revenue (EUR)", ascending=False)

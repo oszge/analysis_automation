@@ -36,9 +36,9 @@ def revenue_chart(series):
                                 line=dict(color=f"rgba(103,151,189,{opacity})", width=width),
                                 hoverinfo="skip", showlegend=False))
     fig.add_trace(go.Scatter(
-        x=series.index, y=series.values, mode="lines", name="Bevétel",
+        x=series.index, y=series.values, mode="lines", name="Revenue",
         line=dict(color="#739bbd", width=2.3), fill="tozeroy", fillcolor="rgba(150,182,207,0.10)",
-        hovertemplate="%{x|%Y. %m. %d.}<br><b>%{y:,.2f} €</b><extra>Bevétel</extra>",
+        hovertemplate="%{x|%Y. %m. %d.}<br><b>%{y:,.2f} €</b><extra>Revenue</extra>",
         showlegend=False,
     ))
     chart_layout(fig, 360)
@@ -53,7 +53,7 @@ def ranking_chart(ranking):
         x=values.values, y=values.index, orientation="h",
         marker=dict(color=[PALETTE[i % len(PALETTE)] for i in range(len(values))],
                     line=dict(color="rgba(255,255,255,0.8)", width=1)),
-        hovertemplate="%{y}<br><b>%{x:,.2f} €</b><extra>Bevétel</extra>",
+        hovertemplate="%{y}<br><b>%{x:,.2f} €</b><extra>Revenue</extra>",
     ))
     chart_layout(fig, max(280, len(values) * 36))
     fig.update_xaxes(ticksuffix=" €", showgrid=True, gridcolor="rgba(151,170,189,0.16)")
@@ -63,7 +63,7 @@ def ranking_chart(ranking):
 
 def comparison_chart(comparison):
     fig = go.Figure()
-    for label, color in [("Aktuális bevétel (EUR)", "#91adc5"), ("Előző bevétel (EUR)", "#c7cbd7")]:
+    for label, color in [("Current revenue (EUR)", "#91adc5"), ("Previous revenue (EUR)", "#c7cbd7")]:
         fig.add_trace(go.Bar(x=comparison.index, y=comparison[label], name=label,
                              marker=dict(color=color, line=dict(color="#ffffff", width=1)),
                              hovertemplate="%{x}<br><b>%{y:,.2f} €</b><extra>" + label + "</extra>"))

@@ -13,7 +13,7 @@ st.set_page_config(page_title="Sales Intelligence", page_icon="📊", layout="wi
 apply_style()
 
 
-@st.cache_data(ttl=300, show_spinner="Értékesítési adatok betöltése…")
+@st.cache_data(ttl=300, show_spinner="Loading sales data…")
 def cached_sales(source):
     return load_sales(source), datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -22,7 +22,7 @@ def metrics(data, previous=None):
     values = totals(data)
     baseline = totals(previous) if previous is not None else None
     for column, (key, label) in zip(st.columns(3), [
-        ("revenue", "Bevétel (EUR)"), ("quantity", "Eladott darab"), ("transactions", "Tranzakció"),
+        ("revenue", "Revenue (EUR)"), ("quantity", "Units sold"), ("transactions", "Transactions"),
     ]):
         delta = None
         if baseline is not None:
@@ -35,94 +35,94 @@ def metrics(data, previous=None):
 
 st.html('''<div class="hero"><div><div class="eyebrow">BUSINESS INTELLIGENCE / OVERVIEW</div>
 <h1>Sales Intelligence<span style="color:#9bb1c5">.</span></h1>
-<p>Átlátható teljesítmény. Megalapozott döntések.</p></div>
+<p>Clear performance. Informed decisions.</p></div>
 <div class="hero-badge">PLATINUM EDITION</div></div>''')
 
 with st.sidebar:
     st.html('<div class="brand"><span class="brand-mark">◈</span> INTELLIGENCE</div>')
-    st.header("Adatok és szűrők")
-    source = st.radio("Adatforrás", ["Neon PostgreSQL", "CSV"],
-                      help="A CSV a projekt helyi sales_data fájlja; nem élő adatbázis.")
-    if st.button("Adatok újratöltése", width="stretch"):
+    st.header("Data & filters")
+    source = st.radio("Data source", ["Neon PostgreSQL", "CSV"],
+                      help="CSV uses the local sales_data file, not the live database.")
+    if st.button("Refresh data", width="stretch"):
         cached_sales.clear()
-    st.caption("Az adatgyorsítótár 5 percig érvényes. Az újratöltés nem indít AI-hívást.")
+    st.caption("Data is cached for 5 minutes. Refreshing does not trigger an AI request.")
 
 try:
     data, loaded_at = cached_sales(source)
 except Exception:
-    st.error("Az adatforrás nem tölthető be. Ellenőrizd az adatbázis-kapcsolatot és az adatok formátumát, vagy válaszd a helyi CSV-t.")
+    st.error("Unable to load the data source. Check the database connection and data format, or select the local CSV.")
     st.stop()
 
 if data.empty:
-    st.info("Az adatforrás még nem tartalmaz értékesítéseket.")
+    st.info("The data source does not contain any sales yet.")
     st.stop()
 
 with st.sidebar:
-    countries = st.multiselect("Ország", sorted(data.country.unique()), default=sorted(data.country.unique()))
-    categories = st.multiselect("Kategória", sorted(data.category.unique()), default=sorted(data.category.unique()))
-    dates = st.date_input("Áttekintés időszaka", value=(data.sale_date.min().date(), data.sale_date.max().date()),
+    countries = st.multiselect("Country", sorted(data.country.unique()), default=sorted(data.country.unique()))
+    categories = st.multiselect("Category", sorted(data.category.unique()), default=sorted(data.category.unique()))
+    dates = st.date_input("Overview date range", value=(data.sale_date.min().date(), data.sale_date.max().date()),
                           min_value=data.sale_date.min().date(), max_value=data.sale_date.max().date())
-    st.caption(f"Betöltve: {loaded_at}")
+    st.caption(f"Loaded: {loaded_at}")
 
 segment = data[data.country.isin(countries) & data.category.isin(categories)]
 if len(dates) != 2:
-    st.info("Válaszd ki az időszak kezdő- és záródátumát.")
+    st.info("Select both a start date and an end date.")
     st.stop()
 filtered = segment[segment.sale_date.between(pd.Timestamp(dates[0]), pd.Timestamp(dates[1]))]
-st.caption(f"Forrás: {source} · Legfrissebb adat: {data.sale_date.max():%Y-%m-%d} · Pénznem: EUR (€)")
+st.caption(f"Source: {source} · Latest data: {data.sale_date.max():%Y-%m-%d} · Currency: EUR (€)")
 
-overview, trends, ai_tab = st.tabs(["Áttekintés", "Heti és havi összehasonlítás", "Mentett AI-értékelés"])
+overview, trends, ai_tab = st.tabs(["Overview", "Weekly & monthly comparison", "Saved AI analysis"])
 
 with overview:
     st.subheader(f"{dates[0]:%Y-%m-%d} – {dates[1]:%Y-%m-%d}")
     metrics(filtered)
     if filtered.empty:
-        st.info("A választott szűrőkkel nincs megjeleníthető értékesítés.")
+        st.info("No sales match the selected filters.")
     else:
-        st.subheader("Bevétel alakulása")
-        frequency = st.radio("Felbontás", ["Napi", "Heti", "Havi"], horizontal=True)
-        rule = {"Napi": "D", "Heti": "W-SUN", "Havi": "MS"}[frequency]
+        st.subheader("Revenue trend")
+        frequency = st.radio("Frequency", ["Daily", "Weekly", "Monthly"], horizontal=True)
+        rule = {"Daily": "D", "Weekly": "W-SUN", "Monthly": "MS"}[frequency]
         daily = filtered.groupby("sale_date").revenue.sum().reindex(
             pd.date_range(dates[0], dates[1]), fill_value=0)
-        series = daily.resample(rule).sum().rename("Bevétel (EUR)")
+        series = daily.resample(rule).sum().rename("Revenue (EUR)")
         show_chart(revenue_chart(series), "revenue_chart")
-        st.caption("A szélső heti/havi pontok a választott dátumhatároknál részidőszakot is tartalmazhatnak.")
-        for dimension, title in [("category", "Kategóriák"), ("country", "Országok"), ("product", "Top 10 termék")]:
+        st.caption("The first and last weekly or monthly points may represent partial periods within the selected date range.")
+        for dimension, title in [("category", "Categories"), ("country", "Countries"), ("product", "Top 10 products")]:
             with st.expander(title, expanded=dimension != "product"):
                 ranking = filtered.groupby(dimension).revenue.sum().sort_values(ascending=False)
                 show_chart(ranking_chart(ranking), f"ranking_{dimension}")
-                st.dataframe(ranking.rename("Bevétel (EUR)").round(2), width="stretch")
-        with st.expander("Tranzakciók"):
-            st.dataframe(filtered.rename(columns={"revenue": "Bevétel (EUR)"}), hide_index=True, width="stretch")
-        st.download_button("Szűrt adatok letöltése (CSV)", filtered.to_csv(index=False).encode("utf-8-sig"),
+                st.dataframe(ranking.rename("Revenue (EUR)").round(2), width="stretch")
+        with st.expander("Transactions"):
+            st.dataframe(filtered.rename(columns={"revenue": "Revenue (EUR)"}), hide_index=True, width="stretch")
+        st.download_button("Download filtered data (CSV)", filtered.to_csv(index=False).encode("utf-8-sig"),
                            "sales_filtered.csv", "text/csv")
 
 with trends:
-    choice = st.radio("Összehasonlítás", ["Havi", "Heti"], horizontal=True)
-    current, previous, bounds = period_comparison(segment, dates[1], "monthly" if choice == "Havi" else "weekly")
+    choice = st.radio("Comparison", ["Monthly", "Weekly"], horizontal=True)
+    current, previous, bounds = period_comparison(segment, dates[1], "monthly" if choice == "Monthly" else "weekly")
     start, end, previous_start, previous_end = bounds
-    st.caption(f"Aktuális: {start:%Y-%m-%d} – {end:%Y-%m-%d} | Előző: {previous_start:%Y-%m-%d} – {previous_end:%Y-%m-%d}")
-    st.info("Az összehasonlítás az áttekintés záródátumához igazodik, és megtartja az ország- és kategóriaszűrőt. A kezdődátumot nem használja.")
-    if choice == "Havi" and end != end + pd.offsets.MonthEnd(0):
-        st.warning("Részleges aktuális hónapot hasonlítunk a teljes előző hónaphoz, a meglévő riport logikája szerint.")
+    st.caption(f"Current: {start:%Y-%m-%d} – {end:%Y-%m-%d} | Previous: {previous_start:%Y-%m-%d} – {previous_end:%Y-%m-%d}")
+    st.info("Comparison periods use the overview end date and the selected country and category filters. The start date does not apply.")
+    if choice == "Monthly" and end != end + pd.offsets.MonthEnd(0):
+        st.warning("A partial current month is compared with the full previous month, following the existing report logic.")
     if previous_start < data.sale_date.min():
-        st.warning("Az előző időszak részben vagy teljesen az adatforrás dátumtartományán kívül esik.")
+        st.warning("The previous period falls partly or entirely outside the available data range.")
     metrics(current, previous)
     if previous.revenue.sum() == 0:
-        st.caption("Nulla előző bevételnél százalékos változás nem számítható.")
-    dimension = st.selectbox("Bontás", ["category", "country", "product"],
-                            format_func=lambda key: {"category": "Kategória", "country": "Ország", "product": "Termék"}[key])
+        st.caption("Percentage change is unavailable when previous revenue is zero.")
+    dimension = st.selectbox("Breakdown", ["category", "country", "product"],
+                            format_func=lambda key: {"category": "Category", "country": "Country", "product": "Product"}[key])
     comparison = segment_comparison(current, previous, dimension)
     if comparison.empty:
-        st.info("Ezekben az időszakokban nincs adat a kiválasztott szegmensekre.")
+        st.info("No data is available for the selected segments in these periods.")
     else:
         show_chart(comparison_chart(comparison.head(10)), "comparison_chart")
         st.dataframe(comparison, width="stretch")
 
 with ai_tab:
-    st.subheader("Korábban elkészített üzleti értékelés")
-    st.warning("Ez a mentett értékelés a teljes korábbi elemzéshez tartozik. A szűrők nem módosítják; az aktuális adatokkal való egyezése nem igazolt.")
-    st.caption("A dashboard nem hívja meg az AI-t, és nem futtatja a riportgeneráló folyamatot.")
+    st.subheader("Previously generated business analysis")
+    st.warning("This saved analysis covers the previous full dataset. Filters do not change it, and its consistency with the current data has not been verified.")
+    st.caption("The dashboard does not trigger AI requests or run the report generation pipeline.")
     ai_path = BASE_DIR / "ai_response.json"
     try:
         saved = json.loads(ai_path.read_text(encoding="utf-8"))
@@ -132,15 +132,15 @@ with ai_tab:
             if not isinstance(saved.get(key), list) or not all(isinstance(x, str) for x in saved[key]):
                 raise ValueError("Invalid section")
     except (OSError, ValueError):
-        st.info("Még nincs olvasható, megfelelő formátumú mentett AI-értékelés.")
+        st.info("No readable, correctly formatted saved AI analysis is available yet.")
     else:
-        st.caption(f"Fájl módosítva: {datetime.fromtimestamp(ai_path.stat().st_mtime):%Y-%m-%d %H:%M} (nem az elemzett időszak)")
+        st.caption(f"File updated: {datetime.fromtimestamp(ai_path.stat().st_mtime):%Y-%m-%d %H:%M} (not the analysis period)")
         st.markdown(saved["executive_summary"])
-        for key, label in [("key_insights", "Fő megállapítások"), ("risks", "Kockázatok"), ("recommendations", "Javaslatok")]:
+        for key, label in [("key_insights", "Key insights"), ("risks", "Risks"), ("recommendations", "Recommendations")]:
             st.subheader(label)
             for item in saved[key]:
                 st.markdown(f"- {item}")
     report_path = BASE_DIR / "business_intelligence_report.md"
     if report_path.is_file():
-        st.download_button("Korábban mentett riport letöltése", report_path.read_bytes(),
+        st.download_button("Download saved report", report_path.read_bytes(),
                            report_path.name, "text/markdown")
