@@ -1,12 +1,14 @@
 # Business Intelligence Report
 
+**Currency: EUR (€). All monetary amounts are in euros.**
+
 ## Executive Summary
 
-Revenue increased in both reported periods: weekly revenue reached 1619.81, up 47.2 or 3.0%, while monthly revenue reached 7368.12, up 333.59 or 4.74%. Growth was supported by Sports & Outdoors, Clothing, Office Supplies, and several products, but was partly offset by substantial declines in Home & Kitchen, Germany, Austria, and Coffee Maker. Overall revenue was 51625.32 across 1641 units and 1000 transactions.
+Revenue increased in both reported periods: weekly revenue rose from EUR 1,572.61 to EUR 1,619.81, an increase of EUR 47.20 or 3.0%; monthly revenue rose from EUR 7,034.53 to EUR 7,368.12, an increase of EUR 333.59 or 4.74%. Growth was supported by Clothing, Office Supplies, and Sports & Outdoors, while Home & Kitchen, Germany, and Austria were the main areas of decline.
 
 ## Overall Performance
 
-- Total revenue: 51,625.32
+- Total revenue: 51,625.32 EUR
 - Total units sold: 1641
 - Total transactions: 1000
 - Best category: Electronics
@@ -17,55 +19,56 @@ Revenue increased in both reported periods: weekly revenue reached 1619.81, up 4
 
 **Period:** 2026-08-01 – 2026-08-31
 
-- Revenue: 7,368.12
-- Previous revenue: 7,034.53
-- Revenue change: +333.59 (+4.74%)
+- Revenue: 7,368.12 EUR
+- Previous revenue: 7,034.53 EUR
+- Revenue change: +333.59 EUR (+4.74%)
 - Units sold: 239
 - Previous units sold: 224
 - Transactions: 150
 - Previous transactions: 140
-- Best category: Sports & Outdoors (2,140.33)
-- Best country: Germany (1,956.69)
+- Best category: Sports & Outdoors (2,140.33 EUR)
+- Best country: Germany (1,956.69 EUR)
 
 ## Weekly Performance
 
 **Period:** 2026-08-25 – 2026-08-31
 
-- Revenue: 1,619.81
-- Previous revenue: 1,572.61
-- Revenue change: +47.20 (+3.00%)
+- Revenue: 1,619.81 EUR
+- Previous revenue: 1,572.61 EUR
+- Revenue change: +47.20 EUR (+3.00%)
 - Units sold: 51
 - Previous units sold: 45
 - Transactions: 32
 - Previous transactions: 28
-- Best category: Sports & Outdoors (674.13)
-- Best country: Germany (499.00)
+- Best category: Sports & Outdoors (674.13 EUR)
+- Best country: Germany (499.00 EUR)
 
 ## Key Insights
 
-- Monthly transaction volume increased from 140 to 150 and units increased from 224 to 239, indicating broader activity alongside the revenue growth.
-- Sports & Outdoors was the leading monthly category at 2140.33, up 354.33 or 19.84%, and was also the leading weekly category at 674.13.
-- Clothing was a major category growth driver, increasing by 747.88 or 82.74% to 1651.73. Office Supplies increased by 350.48 or 54.66% to 991.72.
-- Home & Kitchen was the largest category decline, falling by 927.41 or 46.7% to 1058.34. Electronics also declined by 191.69 or 11.16% to 1526.0.
-- Czechia recorded the largest country increase, up 863.24 or 490.51% to 1039.23, but the percentage is amplified by the low previous revenue of 175.99. Hungary also grew materially, up 511.04 or 36.89% to 1896.52.
-- Germany remained the leading country overall and monthly at 1956.69, but monthly revenue fell by 654.78 or 25.07%. Austria declined by 685.46 or 40.02%.
-- Laptop Stand showed the largest product percentage increase, up 532.77 or 847.01% to 595.67; this percentage is heavily influenced by the low previous revenue of 62.9. Rain Jacket and Cotton T-shirt also grew strongly, by 405.66 and 193.82 respectively.
-- Coffee Maker fell to 0.0 from 377.6, a decline of 377.6 or 100.0%. Desk Fan also declined materially by 310.96 or 33.58%, while Nonstick Frying Pan fell by 236.56 or 65.92%.
-- The best overall category is Electronics, the best overall country is Germany, and the best overall product is 27-inch Monitor. In the monthly comparison, 27-inch Monitor increased by 12.81 or 6.35% to 214.62.
+- Overall performance totals EUR 51,625.32 in revenue, 1,641 units, and 1,000 transactions. Electronics is the best category overall, Germany is the best country overall, and the 27-inch Monitor is the best product overall.
+- Weekly units increased from 45 to 51 and transactions increased from 28 to 32. Sports & Outdoors led weekly revenue at EUR 674.13, while Germany led by country at EUR 499.00.
+- Monthly units increased from 224 to 239 and transactions increased from 140 to 150. Sports & Outdoors was the leading category at EUR 2,140.33, and Germany was the leading country at EUR 1,956.69 despite declining versus the previous period.
+- Clothing was the strongest category growth driver, increasing by EUR 747.88 or 82.74%. Office Supplies increased by EUR 350.48 or 54.66%, and Sports & Outdoors increased by EUR 354.33 or 19.84%.
+- Home & Kitchen was the largest category drag, declining by EUR 927.41 or 46.7%. Electronics also declined by EUR 191.69 or 11.16%.
+- Czechia recorded the largest country growth at EUR 863.24 or 490.51%, rising from a low previous-period baseline of EUR 175.99. Hungary, Poland, and Slovakia also grew by EUR 511.04, EUR 190.89, and EUR 108.66 respectively.
+- Germany declined by EUR 654.78 or 25.07%, while Austria declined by EUR 685.46 or 40.02%. These declines offset part of the growth in other countries.
+- Laptop Stand increased by EUR 532.77 or 847.01%, but this percentage is heavily influenced by its low previous-period revenue of EUR 62.90. Rain Jacket, Cotton T-shirt, and Yoga Mat also delivered notable growth.
+- Coffee Maker fell by EUR 377.60 or 100.0%, while Desk Fan declined by EUR 310.96 or 33.58% and Nonstick Frying Pan declined by EUR 236.56 or 65.92%. These were important product-level declines.
+- The 27-inch Monitor remains the best product overall and grew by EUR 12.81 or 6.35%; its current revenue was EUR 214.62.
 
 ## Risks
 
-- Overall growth is modest relative to the scale of the declines in Home & Kitchen, Germany, and Austria, leaving performance dependent on continued strength in other segments.
-- The complete loss of Coffee Maker revenue and the decline in several Home & Kitchen products indicate potential availability, demand, pricing, or merchandising issues requiring investigation.
-- Germany is both the best country overall and the monthly leading country, yet its revenue declined by 654.78 or 25.07%, creating concentration risk in an important market.
-- Large percentage gains for Czechia and Laptop Stand are based on low previous-period revenues, so they should not be treated as equivalent to established growth without further validation.
-- Wireless Headphones, Desk Fan, Desk Organizer, and Nonstick Frying Pan all recorded meaningful revenue declines, which may weaken the product mix if the trend persists.
+- Monthly growth is exposed to a substantial decline in Home & Kitchen, including the complete loss of Coffee Maker revenue versus the previous period.
+- Germany and Austria together experienced significant revenue declines of EUR 654.78 and EUR 685.46 respectively, creating geographic concentration and market-performance risk.
+- Several very high percentage growth rates, particularly Czechia and Laptop Stand, are based on small previous-period revenue values and may not represent sustained underlying demand.
+- Electronics declined despite being the best category overall, with revenue down by EUR 191.69 or 11.16%. Further weakness could affect a key established category.
+- Declines in Desk Fan, Nonstick Frying Pan, Wireless Headphones, and other products indicate uneven product performance and potential inventory, pricing, or demand issues.
 
 ## Recommendations
 
-- Investigate the Home & Kitchen decline, prioritizing Coffee Maker, Nonstick Frying Pan, Desk Organizer, and Electric Kettle for stock, pricing, promotion, and demand review.
-- Protect and scale the strongest growth areas, especially Sports & Outdoors, Clothing, Office Supplies, Laptop Stand, Rain Jacket, and Cotton T-shirt.
-- Review the causes of Germany and Austria revenue declines while maintaining the current focus on Germany, which remains the leading country by revenue.
-- Validate whether the Czechia and Laptop Stand increases reflect sustainable demand, expanded distribution, promotions, or low prior-period availability before committing additional resources.
-- Assess underperforming products such as Desk Fan, Wireless Headphones, and Nonstick Frying Pan for corrective actions, including merchandising changes or inventory adjustments.
-- Continue monitoring transactions and units alongside revenue, since monthly transactions increased from 140 to 150 and units increased from 224 to 239.
+- Investigate the Home & Kitchen decline immediately, prioritising Coffee Maker, Nonstick Frying Pan, and Desk Organizer to identify availability, pricing, promotion, or demand problems.
+- Protect and scale the strongest category momentum in Clothing, Office Supplies, and Sports & Outdoors, while validating whether the growth is repeatable beyond the current period.
+- Review Germany and Austria separately for changes in traffic, conversion, assortment, pricing, and fulfilment; use the stronger performance in Czechia, Hungary, Poland, and Slovakia to inform market actions.
+- Monitor Laptop Stand and Czechia using absolute revenue alongside percentage growth, since their high percentage increases are amplified by low prior-period baselines.
+- Assess Electronics product performance, especially Wireless Headphones, Wireless Mouse, and Electric Kettle, and compare corrective actions with the stable or growing performance of the 27-inch Monitor and Mechanical Keyboard.
+- Use weekly gains in units and transactions as a positive near-term signal, but continue tracking whether revenue growth remains consistent across subsequent periods.

@@ -1,3 +1,4 @@
+-- All revenue values are in EUR (euros). No currency conversion.
 CREATE TABLE sales (
     id BIGSERIAL PRIMARY KEY,
     sale_date DATE NOT NULL,

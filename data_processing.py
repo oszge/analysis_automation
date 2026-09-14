@@ -287,6 +287,7 @@ monthly_kpis = {
 }
 
 analysis_data = {
+    "currency": "EUR",
     "overall": kpis,
     "weekly": weekly_kpis,
     "monthly": monthly_kpis,

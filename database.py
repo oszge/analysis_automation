@@ -52,7 +52,8 @@ def load_sales():
         category,
         country,
         quantity,
-        revenue
+        revenue,
+        'EUR' AS currency
     FROM sales
     ORDER BY sale_date;
     """

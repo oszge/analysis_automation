@@ -13,6 +13,7 @@ client = OpenAI(api_key=OPENAI_API_KEY)
 
 
 class BusinessAnalysis(BaseModel):
+    currency: str = "EUR"
     executive_summary: str
     key_insights: list[str]
     risks: list[str]
@@ -33,6 +34,7 @@ You are a business intelligence analyst.
 Analyse the provided sales KPIs and trend data.
 
 Rules:
+- All monetary amounts are in EUR (euros). Label every monetary amount with EUR; do not convert values. Percentages and counts are not currency.
 - Only use the supplied data.
 - Never invent numbers.
 - Do not modify the supplied financial values.
