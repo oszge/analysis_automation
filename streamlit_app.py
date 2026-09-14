@@ -6,11 +6,40 @@ from datetime import datetime
 import pandas as pd
 import streamlit as st
 
-from dashboard_data import BASE_DIR, load_sales, segment_comparison, totals
+from dashboard_data import BASE_DIR, load_sales, prepare_sales, segment_comparison, totals
+from published_report import read as read_publication
 from dashboard_style import apply_style, revenue_chart, ranking_chart, comparison_chart, show_chart
 
 st.set_page_config(page_title="Sales Intelligence", page_icon="📊", layout="wide")
 apply_style()
+
+
+def cloud_url():
+    from streamlit.errors import StreamlitSecretNotFoundError
+    try:
+        return st.secrets.get("DATABASE_URL")
+    except (FileNotFoundError, StreamlitSecretNotFoundError):
+        return None
+
+
+@st.cache_data(ttl=60, show_spinner="Loading published dashboard…")
+def cached_publication():
+    return read_publication(cloud_url())
+
+
+@st.fragment(run_every="60s")
+def watch_publication():
+    if source != "Neon PostgreSQL":
+        return
+    try:
+        latest = read_publication(cloud_url(), version_only=True)
+    except Exception:
+        st.warning("Update check failed. The displayed publication has been retained.")
+        return
+    version = latest["published_at"] if latest else None
+    if version != st.session_state.get("publication_version"):
+        cached_publication.clear()
+        st.rerun()
 
 
 @st.cache_data(ttl=300, show_spinner="Loading sales data…")
@@ -61,10 +90,21 @@ with st.sidebar:
                       help="CSV uses the local sales_data file, not the live database.")
     if st.button("Refresh data", width="stretch"):
         cached_sales.clear()
-    st.caption("Data is cached for 5 minutes. Refreshing does not trigger an AI request.")
+        cached_publication.clear()
+    st.caption("Published updates are checked every minute while this page is open. Refreshing does not trigger an AI request.")
 
 try:
-    data, loaded_at = cached_sales(source)
+    publication = cached_publication() if source == "Neon PostgreSQL" else None
+    st.session_state["publication_version"] = publication["published_at"] if publication else None
+    if source == "Neon PostgreSQL":
+        watch_publication()
+        if publication is None:
+            st.info("No validated dashboard has been published yet. Run the Node-RED report with AI refresh enabled.")
+            st.stop()
+        data = prepare_sales(pd.DataFrame(publication["payload"]["sales"]))
+        loaded_at = str(publication["published_at"])
+    else:
+        data, loaded_at = cached_sales(source)
 except Exception as exc:
     st.error("Unable to load the data source. Check the database connection and data format, or select the local CSV.")
     # Never display exception text: database errors may contain credentials.
@@ -182,11 +222,14 @@ with trends:
 
 with ai_tab:
     st.subheader("Previously generated business analysis")
-    st.warning("This saved analysis covers the previous full dataset. Filters do not change it, and its consistency with the current data has not been verified.")
+    if publication:
+        st.caption(f"Published: {publication['published_at']} · Analysis and charts use the same saved dataset. Filters do not regenerate AI analysis.")
+    else:
+        st.warning("Local saved analysis may not match the selected CSV data.")
     st.caption("The dashboard does not trigger AI requests or run the report generation pipeline.")
     ai_path = BASE_DIR / "ai_response.json"
     try:
-        saved = json.loads(ai_path.read_text(encoding="utf-8"))
+        saved = publication["payload"]["analysis"] if publication else json.loads(ai_path.read_text(encoding="utf-8"))
         if not isinstance(saved, dict) or not isinstance(saved.get("executive_summary"), str):
             raise ValueError("Invalid summary")
         for key in ("key_insights", "risks", "recommendations"):
@@ -195,13 +238,17 @@ with ai_tab:
     except (OSError, ValueError):
         st.info("No readable, correctly formatted saved AI analysis is available yet.")
     else:
-        st.caption(f"File updated: {datetime.fromtimestamp(ai_path.stat().st_mtime):%Y-%m-%d %H:%M} (not the analysis period)")
+        if not publication:
+            st.caption(f"File updated: {datetime.fromtimestamp(ai_path.stat().st_mtime):%Y-%m-%d %H:%M} (not the analysis period)")
         st.markdown(saved["executive_summary"])
         for key, label in [("key_insights", "Key insights"), ("risks", "Risks"), ("recommendations", "Recommendations")]:
             st.subheader(label)
             for item in saved[key]:
                 st.markdown(f"- {item}")
     report_path = BASE_DIR / "business_intelligence_report.md"
-    if report_path.is_file():
+    if publication:
+        st.download_button("Download published report", publication["payload"]["report"],
+                           "business_intelligence_report.md", "text/markdown")
+    elif report_path.is_file():
         st.download_button("Download saved report", report_path.read_bytes(),
                            report_path.name, "text/markdown")

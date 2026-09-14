@@ -41,3 +41,28 @@ háttérfeldolgozás. A Node-RED ütemezés és az AI-értékelés adatverzióho
 a következő fejlesztési lépés.
 
 API- és tesztreferencia: https://docs.streamlit.io/develop/api-reference
+
+
+## Közös napi dashboard-publikáció
+
+A meglévő Node-RED folyamat naponta 08:00-kor (Europe/Budapest) futtatja
+az elemzést. A gépnek ébren kell lennie. Az adatbetöltésnek a futás előtt
+be kell fejeződnie; a folyamat nem állít elő új értékesítési adatokat.
+
+REFRESH_AI_RESPONSE=True esetén az új AI-válasz sikeres validálás után,
+a feldolgozott teljes értékesítési adatállapottal és Markdown-riporttal együtt,
+egyetlen tranzakcióban kerül a Neon dashboard_publication táblájába.
+A tábla a legutóbbi sikeres publikációt tárolja. Hibás validálás vagy sikertelen
+adatbázis-tranzakció nem írja felül az előző publikációt.
+False mellett nincs AI-hívás és nincs közös publikálás; a helyi riportkészítés
+megmarad, de a felhős adatállapot nem változik.
+
+A dashboard Neon módban ebből a publikációból olvassa a grafikonok alapadatait
+és az AI-elemzést. Nyitott munkamenetben percenként ellenőrzi az új verziót,
+és változáskor újrarajzolja az oldalt. Az AI az egész mentett adathalmazt
+értékeli; az ország-, kategória- és dátumszűrők nem generálnak új AI-szöveget.
+A CSV mód továbbra is helyi előnézet, külön tárolt AI-fájllal.
+
+A felhőben a DATABASE_URL gyökérszintű Secret ugyanarra a Neon adatbázisra
+mutasson. A publikáló felhasználónak CREATE/INSERT/UPDATE, a dashboardnak
+SELECT jogosultság szükséges a publikációs táblához. A dashboard nem hív AI-t.

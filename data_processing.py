@@ -5,6 +5,7 @@ import analysis_automation.ai_analysis as ai
 import analysis_automation.validation as validation
 from pathlib import Path
 import analysis_automation.report_generator as report_generator
+import analysis_automation.published_report as published_report
 
 BASE_DIR = Path(__file__).resolve().parent
 AI_RESPONSE_PATH = BASE_DIR / "ai_response.json"
@@ -303,13 +304,6 @@ analysis_data = {
 if REFRESH_AI_RESPONSE :
     business_analysis = ai.analyze_with_ai(analysis_data)
 
-    with open(AI_RESPONSE_PATH, "w", encoding="utf-8") as file:
-        json.dump(
-            business_analysis.model_dump(),
-            file,
-            indent=4,
-            ensure_ascii=False
-        )
 
 else:
     with open(AI_RESPONSE_PATH, "r", encoding="utf-8") as file:
@@ -334,5 +328,11 @@ else:
     report = report_generator.generate_report(
         business_analysis, analysis_data
     )
+    if REFRESH_AI_RESPONSE:
+        published_report.publish(data, business_analysis.model_dump(), report)
+        AI_RESPONSE_PATH.write_text(json.dumps(business_analysis.model_dump(), indent=4, ensure_ascii=False), encoding="utf-8")
+        print("Dashboard publication updated in Neon.")
+    else:
+        print("AI refresh disabled: shared dashboard publication remains unchanged.")
     report_path = report_generator.save_report(report)
     print(f"\nReport generated: {report_path}")
