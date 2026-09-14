@@ -31,7 +31,7 @@ def chart_layout(fig, height=340):
 def revenue_chart(series):
     fig = go.Figure()
     # Identical geometry on each layer: the halo never changes the data curve.
-    for width, opacity in [(24, 0.10), (14, 0.16), (7, 0.24)]:
+    for width, opacity in [(10, 0.035), (7, 0.055), (4, 0.09)]:
         fig.add_trace(go.Scatter(x=series.index, y=series.values, mode="lines",
                                 line=dict(color=f"rgba(103,151,189,{opacity})", width=width),
                                 name="Revenue glow", hoverinfo="skip", showlegend=False))
@@ -53,7 +53,7 @@ def ranking_chart(ranking):
     # A translucent wider bar is a visual halo; the foreground bar remains the data.
     fig.add_trace(go.Bar(
         x=values.values, y=values.index, orientation="h",
-        marker=dict(color="rgba(125,164,194,0.20)", line=dict(color="rgba(125,164,194,0.20)", width=16)),
+        marker=dict(color="rgba(125,164,194,0.06)", line=dict(color="rgba(125,164,194,0.06)", width=4)),
         name="Revenue glow", hoverinfo="skip", showlegend=False,
     ))
     fig.add_trace(go.Bar(
@@ -74,7 +74,7 @@ def comparison_chart(comparison):
     for label, color in [("Current revenue (EUR)", "#91adc5"), ("Previous revenue (EUR)", "#c7cbd7")]:
         # Soft translucent underlay creates a restrained platinum glow around each bar.
         fig.add_trace(go.Bar(x=comparison.index, y=comparison[label], name=label + " glow",
-                             marker=dict(color="rgba(145,173,197,0.20)", line=dict(color="rgba(145,173,197,0.22)", width=12)),
+                             marker=dict(color="rgba(145,173,197,0.06)", line=dict(color="rgba(145,173,197,0.07)", width=4)),
                              hoverinfo="skip", showlegend=False, offsetgroup=label))
         fig.add_trace(go.Bar(x=comparison.index, y=comparison[label], name=label,
                              marker=dict(color=color, line=dict(color="#ffffff", width=1)),
