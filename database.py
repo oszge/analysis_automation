@@ -14,7 +14,10 @@ def get_engine(database_url=None):
         raise ValueError("DATABASE_URL is not configured.")
     if url.startswith("postgres://"):
         url = "postgresql://" + url[len("postgres://"):]
-    return create_engine(url, pool_pre_ping=True, connect_args={"connect_timeout": 15})
+    try:
+        return create_engine(url, pool_pre_ping=True, connect_args={"connect_timeout": 15})
+    except ValueError:
+        raise ValueError("DATABASE_URL contains an invalid connection parameter, such as a non-numeric port.") from None
 def import_sales():
     data = pd.read_csv(r"C:\Users\oszge\Documents\CodeCool\python\envPython\analysis_automation\sales_data_v2")
 
