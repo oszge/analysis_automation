@@ -1,11 +1,25 @@
 import pandas as pd
 import analysis_automation.database as database
+import json
+import analysis_automation.ai_analysis as ai
+import analysis_automation.validation as validation
+from pathlib import Path
+import analysis_automation.report_generator as report_generator
+
+BASE_DIR = Path(__file__).resolve().parent
+AI_RESPONSE_PATH = BASE_DIR / "ai_response.json"
 
 data = database.load_sales()
 
 ##DATA CLEANING
 data["sale_date"] = pd.to_datetime(data["sale_date"])
 latest_date = data["sale_date"].max()
+
+def calculate_change_percent(current, previous):
+    if previous == 0:
+        return None
+
+    return round(((current - previous) / previous) * 100, 2)
 
 #WEEKLY DATA CLEANING
 current_week_start = latest_date - pd.Timedelta(days=6)
@@ -114,10 +128,12 @@ category_comparison = pd.DataFrame({
     "previous_revenue": previous_category_revenue
 }).fillna(0)
 
-category_comparison["change_percent"] = (
-    (category_comparison["current_revenue"] - category_comparison["previous_revenue"])
-    / category_comparison["previous_revenue"]
-    * 100
+category_comparison["change_percent"] = category_comparison.apply(
+    lambda row: calculate_change_percent(
+        row["current_revenue"],
+        row["previous_revenue"]
+    ),
+    axis=1
 )
 category_comparison["change_value"] = (
     category_comparison["current_revenue"]
@@ -144,10 +160,12 @@ country_comparison = pd.DataFrame({
     "previous_revenue": previous_country_revenue
 }).fillna(0)
 
-country_comparison["change_percent"] = (
-    (country_comparison["current_revenue"] - country_comparison["previous_revenue"])
-    / country_comparison["previous_revenue"]
-    * 100
+country_comparison["change_percent"] = country_comparison.apply(
+    lambda row: calculate_change_percent(
+        row["current_revenue"],
+        row["previous_revenue"]
+    ),
+    axis=1
 )
 country_comparison["change_value"] = (
     country_comparison["current_revenue"]
@@ -175,10 +193,12 @@ product_comparison = pd.DataFrame({
     "previous_revenue": previous_product_revenue
 }).fillna(0)
 
-product_comparison["change_percent"] = (
-    (product_comparison["current_revenue"] - product_comparison["previous_revenue"])
-    / product_comparison["previous_revenue"]
-    * 100
+product_comparison["change_percent"] = product_comparison.apply(
+    lambda row: calculate_change_percent(
+        row["current_revenue"],
+        row["previous_revenue"]
+    ),
+    axis=1
 )
 product_comparison["change_value"] = (
     product_comparison["current_revenue"]
@@ -217,6 +237,11 @@ weekly_kpis = {
         if weekly_revenue_change is not None
         else None
     ),
+    "revenue_change_value": round(
+    float(current_week_revenue - previous_week_revenue),
+    2
+    ),
+    
 
     "current_units": int(current_week_units),
     "previous_units": int(previous_week_units),
@@ -243,6 +268,10 @@ monthly_kpis = {
         if monthly_revenue_change is not None
         else None
     ),
+    "revenue_change_value": round(
+    float(current_month_revenue - previous_month_revenue),
+    2
+    ),
 
     "current_units": int(current_month_units),
     "previous_units": int(previous_month_units),
@@ -257,17 +286,51 @@ monthly_kpis = {
     "best_country_revenue": round(float(best_monthly_country_revenue), 2)
 }
 
+analysis_data = {
+    "overall": kpis,
+    "weekly": weekly_kpis,
+    "monthly": monthly_kpis,
+    "monthly_comparisons": {
+        "categories": category_comparison.reset_index().to_dict(orient="records"),
+        "countries": country_comparison.reset_index().to_dict(orient="records"),
+        "products": product_comparison.reset_index().to_dict(orient="records")
+    }
+}
 
-print("KPIs")
-print(kpis)
-print("Weekly KPIs")
-print(weekly_kpis)
-print("Monthly KPIs")
-print(monthly_kpis)
+REFRESH_AI_RESPONSE  = False
 
-print("\nCategory Comparison")
-print(category_comparison)
-print("\nCountry Comparison")
-print(country_comparison)
-print("\nProduct Comparison")
-print(product_comparison)
+if REFRESH_AI_RESPONSE :
+    business_analysis = ai.analyze_with_ai(analysis_data)
+
+    with open(AI_RESPONSE_PATH, "w", encoding="utf-8") as file:
+        json.dump(
+            business_analysis.model_dump(),
+            file,
+            indent=4,
+            ensure_ascii=False
+        )
+
+else:
+    with open(AI_RESPONSE_PATH, "r", encoding="utf-8") as file:
+        saved_analysis = json.load(file)
+
+    business_analysis = ai.BusinessAnalysis(**saved_analysis)
+
+
+validation_warnings = validation.validate_business_analysis(
+    business_analysis, analysis_data
+)
+if validation_warnings:
+    print("\nVALIDATION WARNINGS")
+
+    for warning in validation_warnings:
+        print("-", warning)
+
+else:
+    print("\nVALIDATION PASSED")
+
+    report = report_generator.generate_report(
+        business_analysis, analysis_data
+    )
+    report_path = report_generator.save_report(report)
+    print(f"\nReport generated: {report_path}")
