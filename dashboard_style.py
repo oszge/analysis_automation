@@ -34,9 +34,9 @@ def revenue_chart(series):
     for width, opacity in [(24, 0.10), (14, 0.16), (7, 0.24)]:
         fig.add_trace(go.Scatter(x=series.index, y=series.values, mode="lines",
                                 line=dict(color=f"rgba(103,151,189,{opacity})", width=width),
-                                hoverinfo="skip", showlegend=False))
+                                name="Revenue glow", hoverinfo="skip", showlegend=False))
     fig.add_trace(go.Scatter(
-        x=series.index, y=series.values, mode="lines", name="Revenue",
+        x=series.index, y=series.values, mode="lines", name="Revenue (EUR)",
         line=dict(color="#739bbd", width=2.3), fill="tozeroy", fillcolor="rgba(150,182,207,0.10)",
         hovertemplate="%{x|%Y. %m. %d.}<br><b>%{y:,.2f} €</b><extra>Revenue</extra>",
         showlegend=False,
@@ -54,10 +54,11 @@ def ranking_chart(ranking):
     fig.add_trace(go.Bar(
         x=values.values, y=values.index, orientation="h",
         marker=dict(color="rgba(125,164,194,0.20)", line=dict(color="rgba(125,164,194,0.20)", width=16)),
-        hoverinfo="skip", showlegend=False,
+        name="Revenue glow", hoverinfo="skip", showlegend=False,
     ))
     fig.add_trace(go.Bar(
         x=values.values, y=values.index, orientation="h",
+        name="Revenue (EUR)", showlegend=False,
         marker=dict(color=[PALETTE[i % len(PALETTE)] for i in range(len(values))],
                     line=dict(color="rgba(255,255,255,0.8)", width=1)),
         hovertemplate="%{y}<br><b>%{x:,.2f} €</b><extra>Revenue</extra>",
@@ -72,7 +73,7 @@ def comparison_chart(comparison):
     fig = go.Figure()
     for label, color in [("Current revenue (EUR)", "#91adc5"), ("Previous revenue (EUR)", "#c7cbd7")]:
         # Soft translucent underlay creates a restrained platinum glow around each bar.
-        fig.add_trace(go.Bar(x=comparison.index, y=comparison[label], name="",
+        fig.add_trace(go.Bar(x=comparison.index, y=comparison[label], name=label + " glow",
                              marker=dict(color="rgba(145,173,197,0.20)", line=dict(color="rgba(145,173,197,0.22)", width=12)),
                              hoverinfo="skip", showlegend=False, offsetgroup=label))
         fig.add_trace(go.Bar(x=comparison.index, y=comparison[label], name=label,
