@@ -33,7 +33,14 @@ def load_sales(source):
         return prepare_sales(pd.read_csv(BASE_DIR / "sales_data_v2"))
 
     from database import load_sales as load_database_sales  
-    return prepare_sales(load_database_sales())
+    import streamlit as st
+    from streamlit.errors import StreamlitSecretNotFoundError
+
+    try:
+        database_url = st.secrets.get("DATABASE_URL")
+    except (FileNotFoundError, StreamlitSecretNotFoundError):
+        database_url = None
+    return prepare_sales(load_database_sales(database_url))
     
 
 

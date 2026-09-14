@@ -8,10 +8,13 @@ load_dotenv()
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-engine = create_engine(
-    DATABASE_URL,
-    pool_pre_ping=True
-)
+def get_engine(database_url=None):
+    url = database_url or DATABASE_URL
+    if not url:
+        raise ValueError("DATABASE_URL is not configured.")
+    if url.startswith("postgres://"):
+        url = "postgresql://" + url[len("postgres://"):]
+    return create_engine(url, pool_pre_ping=True, connect_args={"connect_timeout": 15})
 def import_sales():
     data = pd.read_csv(r"C:\Users\oszge\Documents\CodeCool\python\envPython\analysis_automation\sales_data_v2")
 
@@ -38,13 +41,13 @@ def import_sales():
     sales_data = data.to_dict(orient="records")
 
 
-    with engine.begin() as connection:
+    with get_engine().begin() as connection:
         connection.execute(insert_query, sales_data)
 
 
     print("Data imported successfully.")
 
-def load_sales():
+def load_sales(database_url=None):
     query = """
     SELECT
         sale_date,
@@ -58,4 +61,9 @@ def load_sales():
     ORDER BY sale_date;
     """
 
-    return pd.read_sql(query, engine)
+    engine = get_engine(database_url)
+    try:
+        with engine.connect() as connection:
+            return pd.read_sql(text(query), connection)
+    finally:
+        engine.dispose()

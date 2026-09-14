@@ -65,8 +65,20 @@ with st.sidebar:
 
 try:
     data, loaded_at = cached_sales(source)
-except Exception:
+except Exception as exc:
     st.error("Unable to load the data source. Check the database connection and data format, or select the local CSV.")
+    # Never display exception text: database errors may contain credentials.
+    error_type = type(exc).__name__
+    sqlstate = getattr(getattr(exc, "orig", None), "pgcode", None)
+    hints = {
+        "OperationalError": "Database connection failed. Check credentials, network access and SSL settings.",
+        "ProgrammingError": "The database query failed. Check that sales_v2 and its required columns exist in the configured database.",
+        "ArgumentError": "DATABASE_URL is missing or is not a valid SQLAlchemy connection URL.",
+        "ModuleNotFoundError": "A required Python dependency is missing from the deployment.",
+        "ValueError": "Check DATABASE_URL and the required sales columns, dates and numeric values.",
+    }
+    st.caption(hints.get(error_type, "Data loading failed; diagnostic code below."))
+    st.code(f"Error type: {error_type}" + (f" | SQLSTATE: {sqlstate}" if sqlstate else ""))
     st.stop()
 
 if data.empty:
