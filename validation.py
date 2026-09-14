@@ -41,6 +41,23 @@ def extract_numbers_from_text(text):
 
     return numbers
 
+
+def is_calendar_year(number):
+    """Years are context, not financial or KPI claims."""
+    return number.is_integer() and 1900 <= number <= 2100
+
+
+def collect_derived_numbers(analysis_data):
+    """Allow arithmetic claims that can be derived from supplied KPI values."""
+    values = collect_allowed_numbers(analysis_data)
+    derived = set()
+    numeric = sorted({abs(value) for value in values if not is_calendar_year(value)})
+    for left in numeric:
+        for right in numeric:
+            derived.add(round(left - right, 2))
+            derived.add(round(right - left, 2))
+    return derived
+
 def validate_numeric_claims(business_analysis, analysis_data):
     warnings = []
 
@@ -52,10 +69,13 @@ def validate_numeric_claims(business_analysis, analysis_data):
     ])
 
     allowed_numbers = collect_allowed_numbers(analysis_data)
+    derived_numbers = collect_derived_numbers(analysis_data)
     mentioned_numbers = extract_numbers_from_text(analysis_text)
 
     for number in mentioned_numbers:
-        if number not in allowed_numbers:
+        if is_calendar_year(number):
+            continue
+        if number not in allowed_numbers and number not in derived_numbers:
             warnings.append(
                 f"Number '{number}' was mentioned by the AI but was not found in the supplied analysis data."
             )

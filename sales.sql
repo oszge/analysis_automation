@@ -1,10 +1,10 @@
 -- All revenue values are in EUR (euros). No currency conversion.
-CREATE TABLE sales (
+CREATE TABLE sales_v2 (
     id BIGSERIAL PRIMARY KEY,
     sale_date DATE NOT NULL,
     product VARCHAR(100) NOT NULL,
     category VARCHAR(100) NOT NULL,
     country VARCHAR(100) NOT NULL,
     quantity INTEGER NOT NULL CHECK (quantity>0),
-    revenue NUMERIC(12,2)  OT NULL CHECK (revenue>=0)
+    revenue NUMERIC(12,2)  NOT NULL CHECK (revenue>=0)
 )

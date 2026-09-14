@@ -11,6 +11,8 @@ AI_RESPONSE_PATH = BASE_DIR / "ai_response.json"
 
 data = database.load_sales()
 
+REFRESH_AI_RESPONSE  = True
+
 ##DATA CLEANING
 data["sale_date"] = pd.to_datetime(data["sale_date"])
 latest_date = data["sale_date"].max()
@@ -298,8 +300,6 @@ analysis_data = {
     }
 }
 
-REFRESH_AI_RESPONSE  = False
-
 if REFRESH_AI_RESPONSE :
     business_analysis = ai.analyze_with_ai(analysis_data)
 
@@ -326,6 +326,7 @@ if validation_warnings:
 
     for warning in validation_warnings:
         print("-", warning)
+    raise SystemExit(1)
 
 else:
     print("\nVALIDATION PASSED")

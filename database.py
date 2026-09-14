@@ -13,10 +13,10 @@ engine = create_engine(
     pool_pre_ping=True
 )
 def import_sales():
-    data = pd.read_csv(r"C:\Users\oszge\Documents\CodeCool\python\envPython\analysis_automation\sales_data")
+    data = pd.read_csv(r"C:\Users\oszge\Documents\CodeCool\python\envPython\analysis_automation\sales_data_v2")
 
     insert_query = text("""
-        INSERT INTO sales (
+        INSERT INTO sales_v2 (
             sale_date,
             product,
             category,
@@ -54,7 +54,7 @@ def load_sales():
         quantity,
         revenue,
         'EUR' AS currency
-    FROM sales
+    FROM sales_v2
     ORDER BY sale_date;
     """
 

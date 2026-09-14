@@ -1,5 +1,11 @@
 # Sales Intelligence dashboard
 
+## Node-RED automatizálás
+
+A napi riport minden nap 08:00-kor fut, budapesti idő szerint, ha a gép ébren van
+és a Node-RED fut. Node-RED és Streamlit bejelentkezéskor elindul.
+Szerkesztő: http://127.0.0.1:1880. Részletek: [node_red/README.md](node_red/README.md).
+
 A meglévő elemzési projekt Streamlit felülete. A dashboard csak adatot olvas:
 nem importálja a `data_manipulation.py` fájlt, nem ír az adatbázisba és nem hív AI API-t.
 

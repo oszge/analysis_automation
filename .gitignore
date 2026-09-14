@@ -1,2 +1,5 @@
 .env
+run_logs/
+node_red/.flows*.backup
+node_red/*_cred.json
 __pycache__/
