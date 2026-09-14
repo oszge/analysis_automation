@@ -37,9 +37,8 @@ h3 { font-size: 1.15rem !important; font-weight: 600 !important; }
 [data-testid="stPlotlyChart"] { background:linear-gradient(135deg,#ffffffed,#f3f6f9d9);
     border:1px solid #fff; border-radius:18px; padding:0;
     box-shadow:0 7px 28px #748ba00c, 0 0 0 1px #dee6ed80; }
-[data-testid="stPlotlyChart"] .scatterlayer .trace:last-child .js-line {
-    filter:drop-shadow(0 0 4px #9dbcd48c) drop-shadow(0 0 9px #b0cddd55);
-}
+[data-testid="stPlotlyChart"] .scatterlayer .trace .js-line { filter:drop-shadow(0 0 4px #86afd08f) drop-shadow(0 0 11px #b0cddd75); }
+[data-testid="stPlotlyChart"] .barlayer .trace path { filter:drop-shadow(0 0 4px #9cbcd269); }
 [data-testid="stExpander"] { border:1px solid #dce4ec; border-radius:16px; background:#ffffff70; overflow:hidden; }
 [data-testid="stExpander"] summary { padding:16px 20px; color:#455e75; }
 [data-testid="stButton"] button, [data-testid="stDownloadButton"] button {

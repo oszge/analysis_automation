@@ -33,6 +33,23 @@ def metrics(data, previous=None):
         column.metric(label, f"{values[key]:,.2f} €" if key == "revenue" else f"{values[key]:,}", delta)
 
 
+def display_table(frame, *, hide_index=False):
+    """Keep currency values readable and left aligned across all dashboard tables."""
+    if isinstance(frame, pd.Series):
+        frame = frame.to_frame()
+    display = frame.copy()
+    column_config = {}
+    for column in display.columns:
+        name = str(column)
+        if "EUR" in name or "revenue" in name.lower() or "Change (EUR)" in name:
+            display[column] = pd.to_numeric(display[column], errors="coerce").round(2)
+            column_config[column] = st.column_config.NumberColumn(name, format="%,.2f €")
+        elif "Change (%)" in name:
+            display[column] = pd.to_numeric(display[column], errors="coerce").round(2)
+            column_config[column] = st.column_config.NumberColumn(name, format="%.2f%%")
+    st.dataframe(display, column_config=column_config, hide_index=hide_index, width="stretch")
+
+
 st.html('''<div class="hero"><div><div class="eyebrow">BUSINESS INTELLIGENCE / OVERVIEW</div>
 <h1>Sales Intelligence<span style="color:#9bb1c5">.</span></h1>
 <p>Clear performance. Informed decisions.</p></div>
@@ -91,9 +108,9 @@ with overview:
             with st.expander(title, expanded=dimension != "product"):
                 ranking = filtered.groupby(dimension).revenue.sum().sort_values(ascending=False)
                 show_chart(ranking_chart(ranking), f"ranking_{dimension}")
-                st.dataframe(ranking.rename("Revenue (EUR)").round(2), width="stretch")
+                display_table(ranking.rename("Revenue (EUR)").round(2))
         with st.expander("Transactions"):
-            st.dataframe(filtered.rename(columns={"revenue": "Revenue (EUR)"}), hide_index=True, width="stretch")
+            display_table(filtered.rename(columns={"revenue": "Revenue (EUR)"}), hide_index=True)
         st.download_button("Download filtered data (CSV)", filtered.to_csv(index=False).encode("utf-8-sig"),
                            "sales_filtered.csv", "text/csv")
 
@@ -117,7 +134,7 @@ with trends:
         st.info("No data is available for the selected segments in these periods.")
     else:
         show_chart(comparison_chart(comparison.head(10)), "comparison_chart")
-        st.dataframe(comparison, width="stretch")
+        display_table(comparison)
 
 with ai_tab:
     st.subheader("Previously generated business analysis")

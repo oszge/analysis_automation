@@ -31,7 +31,7 @@ def chart_layout(fig, height=340):
 def revenue_chart(series):
     fig = go.Figure()
     # Identical geometry on each layer: the halo never changes the data curve.
-    for width, opacity in [(16, 0.035), (10, 0.07), (6, 0.12)]:
+    for width, opacity in [(24, 0.10), (14, 0.16), (7, 0.24)]:
         fig.add_trace(go.Scatter(x=series.index, y=series.values, mode="lines",
                                 line=dict(color=f"rgba(103,151,189,{opacity})", width=width),
                                 hoverinfo="skip", showlegend=False))
@@ -49,7 +49,14 @@ def revenue_chart(series):
 
 def ranking_chart(ranking):
     values = ranking.head(10).iloc[::-1]
-    fig = go.Figure(go.Bar(
+    fig = go.Figure()
+    # A translucent wider bar is a visual halo; the foreground bar remains the data.
+    fig.add_trace(go.Bar(
+        x=values.values, y=values.index, orientation="h",
+        marker=dict(color="rgba(125,164,194,0.20)", line=dict(color="rgba(125,164,194,0.20)", width=16)),
+        hoverinfo="skip", showlegend=False,
+    ))
+    fig.add_trace(go.Bar(
         x=values.values, y=values.index, orientation="h",
         marker=dict(color=[PALETTE[i % len(PALETTE)] for i in range(len(values))],
                     line=dict(color="rgba(255,255,255,0.8)", width=1)),
@@ -64,9 +71,13 @@ def ranking_chart(ranking):
 def comparison_chart(comparison):
     fig = go.Figure()
     for label, color in [("Current revenue (EUR)", "#91adc5"), ("Previous revenue (EUR)", "#c7cbd7")]:
+        # Soft translucent underlay creates a restrained platinum glow around each bar.
+        fig.add_trace(go.Bar(x=comparison.index, y=comparison[label], name="",
+                             marker=dict(color="rgba(145,173,197,0.20)", line=dict(color="rgba(145,173,197,0.22)", width=12)),
+                             hoverinfo="skip", showlegend=False, offsetgroup=label))
         fig.add_trace(go.Bar(x=comparison.index, y=comparison[label], name=label,
                              marker=dict(color=color, line=dict(color="#ffffff", width=1)),
-                             hovertemplate="%{x}<br><b>%{y:,.2f} €</b><extra>" + label + "</extra>"))
+                             hovertemplate="%{x}<br><b>%{y:,.2f} €</b><extra>" + label + "</extra>", offsetgroup=label))
     chart_layout(fig, 380)
     fig.update_layout(barmode="group")
     fig.update_yaxes(ticksuffix=" €")

@@ -4,13 +4,13 @@
 
 ## Executive Summary
 
-Revenue declined across both reported periods: weekly revenue fell to EUR 13363.92, down EUR 4214.74 (-23.98%), while monthly revenue fell to EUR 69749.7, down EUR 12437.16 (-15.13%). The monthly decline was driven mainly by Fashion, Home & Living, and the United Kingdom. Consumer Tech, Power Bank, and Ireland provided positive offsets, but not enough to reverse the overall decline.
+Revenue declined in both reporting periods: weekly revenue was EUR 6681.96, down EUR 2107.37 (-23.98%), while monthly revenue was EUR 34874.85, down EUR 6218.58 (-15.13%). The monthly decline was driven primarily by Fashion, Home & Living, and the United Kingdom, partly offset by Consumer Tech and growth in Ireland and Spain.
 
 ## Overall Performance
 
-- Total revenue: 778,818.98 EUR
-- Total units sold: 16390
-- Total transactions: 10000
+- Total revenue: 389,409.49 EUR
+- Total units sold: 8195
+- Total transactions: 5000
 - Best category: Fashion
 - Best country: United Kingdom
 - Best product: Bluetooth Speaker
@@ -19,55 +19,52 @@ Revenue declined across both reported periods: weekly revenue fell to EUR 13363.
 
 **Period:** 2026-12-01 – 2026-12-31
 
-- Revenue: 69,749.70 EUR
-- Previous revenue: 82,186.86 EUR
-- Revenue change: -12,437.16 EUR (-15.13%)
-- Units sold: 1562
-- Previous units sold: 1640
-- Transactions: 980
-- Previous transactions: 960
-- Best category: Consumer Tech (21,103.42 EUR)
-- Best country: United Kingdom (16,807.88 EUR)
+- Revenue: 34,874.85 EUR
+- Previous revenue: 41,093.43 EUR
+- Revenue change: -6,218.58 EUR (-15.13%)
+- Units sold: 781
+- Previous units sold: 820
+- Transactions: 490
+- Previous transactions: 480
+- Best category: Consumer Tech (10,551.71 EUR)
+- Best country: United Kingdom (8,403.94 EUR)
 
 ## Weekly Performance
 
 **Period:** 2026-12-25 – 2026-12-31
 
-- Revenue: 13,363.92 EUR
-- Previous revenue: 17,578.66 EUR
-- Revenue change: -4,214.74 EUR (-23.98%)
-- Units sold: 288
-- Previous units sold: 362
-- Transactions: 198
-- Previous transactions: 238
-- Best category: Fashion (4,774.04 EUR)
-- Best country: United Kingdom (4,248.40 EUR)
+- Revenue: 6,681.96 EUR
+- Previous revenue: 8,789.33 EUR
+- Revenue change: -2,107.37 EUR (-23.98%)
+- Units sold: 144
+- Previous units sold: 181
+- Transactions: 99
+- Previous transactions: 119
+- Best category: Fashion (2,387.02 EUR)
+- Best country: United Kingdom (2,124.20 EUR)
 
 ## Key Insights
 
-- Overall revenue was EUR 778818.98 across 16390 units and 10000 transactions. Fashion was the best overall category, the United Kingdom was the best overall country, and Bluetooth Speaker was the best overall product.
-- Weekly performance weakened materially: revenue declined from EUR 17578.66 to EUR 13363.92, units fell from 362 to 288, and transactions fell from 238 to 198.
-- Monthly revenue declined from EUR 82186.86 to EUR 69749.7 despite transactions increasing from 960 to 980; units decreased from 1640 to 1562.
-- Fashion was the largest category drag, declining by EUR 7623.0 (-27.05%). Home & Living declined by EUR 4099.5 (-35.36%), while Consumer Tech grew by EUR 1778.38 (9.2%).
-- The United Kingdom had the largest country decline, down EUR 6626.72 (-28.28%). Italy declined by EUR 2978.32 (-19.56%) and France by EUR 2660.0 (-15.28%). Ireland grew by EUR 1627.94 (47.19%), but its previous revenue base was only EUR 3450.06, so the high percentage increase should be interpreted cautiously.
-- Power Bank was the strongest product growth contributor, up EUR 2728.64 (136.13%) from a previous revenue base of EUR 2004.42. Smartwatch grew by EUR 1991.26 (34.15%) and Board Game by EUR 1591.06 (43.77%).
-- The largest product declines were Canvas Sneakers, down EUR 3147.36 (-52.59%); Leather Wallet, down EUR 2859.86 (-63.14%); Building Blocks Set, down EUR 2674.9 (-45.13%); and Linen Bed Set, down EUR 1882.68 (-38.6%).
-- Bluetooth Speaker remained the best overall product, but monthly revenue declined by EUR 1097.16 (-16.6%), indicating weakness in a key product despite its overall ranking.
+- Fashion remained the overall best category and the weekly best category at EUR 2387.02, but monthly Fashion revenue fell by EUR 3811.5 (-27.05%), the largest category decline.
+- Home & Living declined by EUR 2049.75 (-35.36%), while Toys & Games declined by EUR 809.84 (-10.68%) and Wellness declined by EUR 436.68 (-11.03%).
+- Consumer Tech was the monthly best category at EUR 10551.71 and grew by EUR 889.19 (+9.2%), providing the main category offset to the decline.
+- The United Kingdom remained the best country at EUR 8403.94 monthly revenue, but declined by EUR 3313.36 (-28.28%), the largest country decline. France fell by EUR 1330.0 (-15.28%), Italy by EUR 1489.16 (-19.56%), and Belgium by EUR 1158.59 (-31.75%).
+- Ireland grew by EUR 813.97 (+47.19%) and Spain grew by EUR 322.0 (+7.73%). Ireland's large percentage increase is partly explained by its relatively small previous revenue base of EUR 1725.03.
+- Power Bank increased by EUR 1364.32 (+136.13%) and Smartwatch by EUR 995.63 (+34.15%). The Power Bank percentage change is unusually large because previous revenue was only EUR 1002.21.
+- The largest product declines were Canvas Sneakers, down EUR 1573.68 (-52.59%); Leather Wallet, down EUR 1429.93 (-63.14%); Building Blocks Set, down EUR 1337.45 (-45.13%); and Linen Bed Set, down EUR 941.34 (-38.6%).
+- Weekly units fell from 181 to 144 and weekly transactions fell from 119 to 99, indicating weaker sales volume alongside the EUR 2107.37 revenue decline. Monthly units fell from 820 to 781, while monthly transactions increased from 480 to 490.
 
 ## Risks
 
-- The weekly revenue decline of 23.98% and the monthly decline of 15.13% indicate broad near-term deterioration rather than an isolated single-period fluctuation.
-- Fashion and Home & Living together represent the most significant category-level revenue pressure based on their supplied absolute declines.
-- The United Kingdom, the best overall country, declined by EUR 6626.72 (-28.28%), creating concentration risk in an important market.
-- Several products show steep percentage declines, including Leather Wallet (-63.14%) and Canvas Sneakers (-52.59%), which may signal demand, pricing, availability, or merchandising issues.
-- Growth rates such as Power Bank (+136.13%) and Ireland (+47.19%) are influenced by relatively small previous-period revenue bases and may not be sustainable.
-- Monthly transactions increased while units declined, which may indicate weaker unit volume per transaction; this should be monitored using the underlying basket and product-mix data.
+- The concentration of decline in Fashion, Home & Living, and the United Kingdom creates material exposure to continued weakness in key categories and the leading market.
+- Several products show steep percentage declines, particularly Leather Wallet, Canvas Sneakers, Building Blocks Set, and Linen Bed Set, which may indicate demand, availability, pricing, or merchandising issues.
+- The weekly deterioration is sharper than the monthly decline, with revenue down 23.98% and units down from 181 to 144, indicating a potential near-term weakening trend.
+- Growth in Power Bank and Ireland should be interpreted cautiously because the percentage increases are based on relatively small previous-period revenue bases.
 
 ## Recommendations
 
-- Prioritize a recovery plan for Fashion and Home & Living, focusing on the products with the largest absolute declines, especially Canvas Sneakers, Leather Wallet, Building Blocks Set, and Linen Bed Set.
-- Investigate the United Kingdom decline by reviewing product availability, pricing, promotional activity, and category performance, then test targeted recovery campaigns.
-- Protect and scale proven growth areas in Consumer Tech, particularly Power Bank and Smartwatch, while validating whether their growth can continue beyond the current comparison period.
-- Review Bluetooth Speaker performance despite its overall leadership, and assess whether the monthly decline reflects stock, pricing, or competitive pressure.
-- Use targeted promotions or merchandising tests for the largest declining products rather than applying broad discounts across all categories.
-- Monitor units and transactions together each week, with particular attention to the ongoing gap between transaction growth and unit performance at monthly level.
+- Prioritize a recovery plan for Fashion and Home & Living, focusing on the products with the largest absolute revenue losses, including Canvas Sneakers, Leather Wallet, Building Blocks Set, and Linen Bed Set.
+- Investigate the United Kingdom decline of EUR 3313.36 and the declines in France, Italy, and Belgium before increasing inventory or promotional spend in those markets.
+- Protect and expand Consumer Tech momentum, particularly Power Bank and Smartwatch, while validating whether Power Bank growth can be sustained beyond its low previous-period base.
+- Review weekly performance urgently because revenue, units, and transactions all declined; use the next reporting period to assess whether the deterioration is temporary or persistent.
+- Assess the drivers of monthly transaction growth from 480 to 490 despite the revenue decline, with attention to product mix, pricing, discounting, and basket composition.
