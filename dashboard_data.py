@@ -28,13 +28,12 @@ def prepare_sales(raw):
 
 
 def load_sales(source):
-
-    if source == "Neon PostgreSQL":    
-        from database import load_sales as load_database_sales  
-        return prepare_sales(load_database_sales())
         
     if source == "CSV":
         return prepare_sales(pd.read_csv(BASE_DIR / "sales_data_v2"))
+
+    from database import load_sales as load_database_sales  
+    return prepare_sales(load_database_sales())
     
 
 
