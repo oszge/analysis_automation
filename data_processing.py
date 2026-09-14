@@ -11,7 +11,7 @@ AI_RESPONSE_PATH = BASE_DIR / "ai_response.json"
 
 data = database.load_sales()
 
-REFRESH_AI_RESPONSE  = False
+REFRESH_AI_RESPONSE  = True
 
 ##DATA CLEANING
 data["sale_date"] = pd.to_datetime(data["sale_date"])

@@ -58,6 +58,29 @@ def collect_derived_numbers(analysis_data):
             derived.add(round(right - left, 2))
     return derived
 
+def mask_supplied_product_names(text, analysis_data):
+    """Exclude exact supplied product labels, without allowing their numbers globally."""
+    names = set()
+
+    def walk(value):
+        if isinstance(value, dict):
+            for key, item in value.items():
+                if key in {"product", "best_product"} and isinstance(item, str) and item:
+                    names.add(item)
+                walk(item)
+        elif isinstance(value, list):
+            for item in value:
+                walk(item)
+
+    walk(analysis_data)
+    if not names:
+        return text
+    pattern = r"(?<!\w)(?:" + "|".join(
+        re.escape(name) for name in sorted(names, key=len, reverse=True)
+    ) + r")(?!\w)"
+    return re.sub(pattern, " ", text, flags=re.IGNORECASE)
+
+
 def validate_numeric_claims(business_analysis, analysis_data):
     warnings = []
 
@@ -70,7 +93,9 @@ def validate_numeric_claims(business_analysis, analysis_data):
 
     allowed_numbers = collect_allowed_numbers(analysis_data)
     derived_numbers = collect_derived_numbers(analysis_data)
-    mentioned_numbers = extract_numbers_from_text(analysis_text)
+    mentioned_numbers = extract_numbers_from_text(
+        mask_supplied_product_names(analysis_text, analysis_data)
+    )
 
     for number in mentioned_numbers:
         if is_calendar_year(number):

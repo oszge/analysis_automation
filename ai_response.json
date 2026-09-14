@@ -1,27 +1,28 @@
 {
     "currency": "EUR",
-    "executive_summary": "Revenue declined in both reporting periods: weekly revenue was EUR 6681.96, down EUR 2107.37 (-23.98%), while monthly revenue was EUR 34874.85, down EUR 6218.58 (-15.13%). The monthly decline was driven primarily by Fashion, Home & Living, and the United Kingdom, partly offset by Consumer Tech and growth in Ireland and Spain.",
+    "executive_summary": "Overall revenue was 777076.79 EUR across 16550 units and 10000 transactions. Weekly performance improved to 17586.22 EUR, up 13.16% or 2044.9 EUR versus the previous week. However, monthly revenue declined to 70768.89 EUR, down 4.22% or 3121.2 EUR, despite transactions increasing from 960 to 980. The monthly decline is concentrated in Toys & Games, the Netherlands, Belgium, Italy, and several major products.",
     "key_insights": [
-        "Fashion remained the overall best category and the weekly best category at EUR 2387.02, but monthly Fashion revenue fell by EUR 3811.5 (-27.05%), the largest category decline.",
-        "Home & Living declined by EUR 2049.75 (-35.36%), while Toys & Games declined by EUR 809.84 (-10.68%) and Wellness declined by EUR 436.68 (-11.03%).",
-        "Consumer Tech was the monthly best category at EUR 10551.71 and grew by EUR 889.19 (+9.2%), providing the main category offset to the decline.",
-        "The United Kingdom remained the best country at EUR 8403.94 monthly revenue, but declined by EUR 3313.36 (-28.28%), the largest country decline. France fell by EUR 1330.0 (-15.28%), Italy by EUR 1489.16 (-19.56%), and Belgium by EUR 1158.59 (-31.75%).",
-        "Ireland grew by EUR 813.97 (+47.19%) and Spain grew by EUR 322.0 (+7.73%). Ireland's large percentage increase is partly explained by its relatively small previous revenue base of EUR 1725.03.",
-        "Power Bank increased by EUR 1364.32 (+136.13%) and Smartwatch by EUR 995.63 (+34.15%). The Power Bank percentage change is unusually large because previous revenue was only EUR 1002.21.",
-        "The largest product declines were Canvas Sneakers, down EUR 1573.68 (-52.59%); Leather Wallet, down EUR 1429.93 (-63.14%); Building Blocks Set, down EUR 1337.45 (-45.13%); and Linen Bed Set, down EUR 941.34 (-38.6%).",
-        "Weekly units fell from 181 to 144 and weekly transactions fell from 119 to 99, indicating weaker sales volume alongside the EUR 2107.37 revenue decline. Monthly units fell from 820 to 781, while monthly transactions increased from 480 to 490."
+        "Fashion was the leading category overall and monthly, generating 21966.06 EUR in monthly revenue and increasing 3.45%, or 732.83 EUR.",
+        "The United Kingdom was the leading country overall and monthly, generating 20296.07 EUR and increasing 9.82%, or 1815.4 EUR. Spain delivered the strongest country growth at 24.65%, or 2296.67 EUR.",
+        "Toys & Games was the largest category decline, falling 19.79% and 3508.55 EUR to 14219.8 EUR.",
+        "The Netherlands and Belgium recorded the largest country declines at 34.61%, or 3560.41 EUR, and 36.21%, or 2557.66 EUR, respectively. Italy also declined by 14.64%, or 1769.49 EUR.",
+        "Product growth was led by Canvas Sneakers, up 62.92% and 2157.29 EUR to 5585.9 EUR, and Action Camera, up 84.35% and 1611.37 EUR to 3521.6 EUR. The Action Camera percentage is unusually large relative to its previous revenue of 1910.23 EUR.",
+        "Bluetooth Speaker was the largest product decline, down 35.39% and 2452.98 EUR. Building Blocks Set also fell 39.2%, or 2349.75 EUR.",
+        "Weekly units increased from 355 to 397 and transactions from 219 to 244, supporting the weekly revenue improvement. Monthly units decreased from 1605 to 1593 while transactions increased from 960 to 980, indicating weaker unit volume despite more transactions."
     ],
     "risks": [
-        "The concentration of decline in Fashion, Home & Living, and the United Kingdom creates material exposure to continued weakness in key categories and the leading market.",
-        "Several products show steep percentage declines, particularly Leather Wallet, Canvas Sneakers, Building Blocks Set, and Linen Bed Set, which may indicate demand, availability, pricing, or merchandising issues.",
-        "The weekly deterioration is sharper than the monthly decline, with revenue down 23.98% and units down from 181 to 144, indicating a potential near-term weakening trend.",
-        "Growth in Power Bank and Ireland should be interpreted cautiously because the percentage increases are based on relatively small previous-period revenue bases."
+        "The monthly revenue decline suggests that weekly improvement has not yet reversed broader performance weakness.",
+        "Toys & Games has a substantial decline, with Board Game, Building Blocks Set, and Puzzle 1000 Pieces all weakening.",
+        "Geographic weakness is concentrated in the Netherlands, Belgium, and Italy, which may indicate market-specific issues in demand, availability, pricing, or marketing.",
+        "Several important products are declining simultaneously, including Bluetooth Speaker, Building Blocks Set, Board Game, Winter Boots, and Wool Scarf.",
+        "Reliance on Fashion and the United Kingdom as leading performers creates exposure if either loses momentum."
     ],
     "recommendations": [
-        "Prioritize a recovery plan for Fashion and Home & Living, focusing on the products with the largest absolute revenue losses, including Canvas Sneakers, Leather Wallet, Building Blocks Set, and Linen Bed Set.",
-        "Investigate the United Kingdom decline of EUR 3313.36 and the declines in France, Italy, and Belgium before increasing inventory or promotional spend in those markets.",
-        "Protect and expand Consumer Tech momentum, particularly Power Bank and Smartwatch, while validating whether Power Bank growth can be sustained beyond its low previous-period base.",
-        "Review weekly performance urgently because revenue, units, and transactions all declined; use the next reporting period to assess whether the deterioration is temporary or persistent.",
-        "Assess the drivers of monthly transaction growth from 480 to 490 despite the revenue decline, with attention to product mix, pricing, discounting, and basket composition."
+        "Prioritise a diagnostic review of Toys & Games, focusing on availability, pricing, promotions, and product-level performance for Building Blocks Set, Board Game, and Puzzle 1000 Pieces.",
+        "Investigate the Netherlands, Belgium, and Italy separately for logistics, stock, pricing, and campaign effectiveness before increasing spend in those markets.",
+        "Protect and scale proven growth areas, particularly Fashion, Canvas Sneakers, Action Camera, Spain, and the United Kingdom.",
+        "Review Bluetooth Speaker and other major declining products for inventory constraints, competitive pricing, assortment relevance, or reduced promotional support.",
+        "Use transaction and unit trends together when evaluating performance: monthly transactions rose from 960 to 980, but units fell from 1605 to 1593, warranting investigation into product mix and basket composition.",
+        "Validate whether the strong Action Camera and Canvas Sneakers growth can be sustained, while recognising that the Action Camera percentage increase is influenced by its previous revenue baseline of 1910.23 EUR."
     ]
 }

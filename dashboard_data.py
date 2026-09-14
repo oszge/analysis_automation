@@ -28,12 +28,15 @@ def prepare_sales(raw):
 
 
 def load_sales(source):
+
+    if source == "Neon PostgreSQL":    
+        from database import load_sales as load_database_sales  
+        return prepare_sales(load_database_sales())
+        
     if source == "CSV":
         return prepare_sales(pd.read_csv(BASE_DIR / "sales_data_v2"))
-    # Import only on explicit database selection; never import the pipeline.
-    from database import load_sales as load_database_sales
+    
 
-    return prepare_sales(load_database_sales())
 
 
 def totals(data):

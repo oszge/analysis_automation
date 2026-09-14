@@ -6,7 +6,7 @@ from datetime import datetime
 import pandas as pd
 import streamlit as st
 
-from dashboard_data import BASE_DIR, load_sales, period_comparison, segment_comparison, totals
+from dashboard_data import BASE_DIR, load_sales, segment_comparison, totals
 from dashboard_style import apply_style, revenue_chart, ranking_chart, comparison_chart, show_chart
 
 st.set_page_config(page_title="Sales Intelligence", page_icon="📊", layout="wide")
@@ -50,10 +50,9 @@ def display_table(frame, *, hide_index=False):
     st.dataframe(display, column_config=column_config, hide_index=hide_index, width="stretch")
 
 
-st.html('''<div class="hero"><div><div class="eyebrow">BUSINESS INTELLIGENCE / OVERVIEW</div>
-<h1>Sales Intelligence<span style="color:#9bb1c5">.</span></h1>
-<p>Clear performance. Informed decisions.</p></div>
-<div class="hero-badge">PLATINUM EDITION</div></div>''')
+st.html('''<div class="hero"><div><div class="eyebrow">SALES INTELLIGENCE / OVERVIEW</div>
+<h1>Business Intel<span style="color:#9bb1c5">.</span></h1>
+<p>Clear performance. Informed decisions.</p></div>''')
 
 with st.sidebar:
     st.html('<div class="brand"><span class="brand-mark">◈</span> INTELLIGENCE</div>')
@@ -88,15 +87,22 @@ if len(dates) != 2:
 filtered = segment[segment.sale_date.between(pd.Timestamp(dates[0]), pd.Timestamp(dates[1]))]
 st.caption(f"Source: {source} · Latest data: {data.sale_date.max():%Y-%m-%d} · Currency: EUR (€)")
 
-overview, trends, ai_tab = st.tabs(["Overview", "Weekly & monthly comparison", "Saved AI analysis"])
+overview, trends, ai_tab = st.tabs(["Overview", "Weekly & monthly comparison", "AI analysis"])
 
 with overview:
-    st.subheader(f"{dates[0]:%Y-%m-%d} – {dates[1]:%Y-%m-%d}")
-    metrics(filtered)
+    today = pd.Timestamp.now(tz="Europe/Budapest").tz_localize(None).normalize()
+    yesterday = today - pd.Timedelta(days=1)
+    today_sales = segment[segment.sale_date.eq(today)]
+    yesterday_sales = segment[segment.sale_date.eq(yesterday)]
+    st.subheader("Today vs yesterday")
+    st.caption(f"Today: {today:%Y-%m-%d} · Yesterday: {yesterday:%Y-%m-%d} · Europe/Budapest. Country and category filters apply; the date range applies only to the charts and tables below. Today is still in progress.")
+    metrics(today_sales, yesterday_sales)
+    if today_sales.empty or yesterday_sales.empty:
+        st.info("A day without matching records is shown as zero. This may indicate no sales or data that has not arrived yet.")
     if filtered.empty:
         st.info("No sales match the selected filters.")
     else:
-        st.subheader("Revenue trend")
+        st.subheader(f"Revenue trend · {dates[0]:%Y-%m-%d} – {dates[1]:%Y-%m-%d}")
         frequency = st.radio("Frequency", ["Daily", "Weekly", "Monthly"], horizontal=True)
         rule = {"Daily": "D", "Weekly": "W-SUN", "Monthly": "MS"}[frequency]
         daily = filtered.groupby("sale_date").revenue.sum().reindex(
@@ -116,14 +122,27 @@ with overview:
 
 with trends:
     choice = st.radio("Comparison", ["Monthly", "Weekly"], horizontal=True)
-    current, previous, bounds = period_comparison(segment, dates[1], "monthly" if choice == "Monthly" else "weekly")
-    start, end, previous_start, previous_end = bounds
+    frequency = "M" if choice == "Monthly" else "W-SUN"
+    periods = list(pd.period_range(data.sale_date.min(), data.sale_date.max(), freq=frequency)[::-1])
+
+    def period_label(value):
+        if choice == "Monthly":
+            return value.start_time.strftime("%Y-%m")
+        return f"{value.start_time:%Y-%m-%d} – {value.end_time:%Y-%m-%d} (Mon–Sun)"
+
+    left, right = st.columns(2)
+    selected = left.selectbox("Current period", periods, format_func=period_label, key=f"current_{choice}")
+    baseline = right.selectbox("Baseline period", periods, index=min(1, len(periods) - 1), format_func=period_label, key=f"baseline_{choice}")
+    start, end = selected.start_time, selected.end_time.normalize()
+    previous_start, previous_end = baseline.start_time, baseline.end_time.normalize()
+    current = segment[segment.sale_date.between(start, end)]
+    previous = segment[segment.sale_date.between(previous_start, previous_end)]
     st.caption(f"Current: {start:%Y-%m-%d} – {end:%Y-%m-%d} | Previous: {previous_start:%Y-%m-%d} – {previous_end:%Y-%m-%d}")
-    st.info("Comparison periods use the overview end date and the selected country and category filters. The start date does not apply.")
-    if choice == "Monthly" and end != end + pd.offsets.MonthEnd(0):
-        st.warning("A partial current month is compared with the full previous month, following the existing report logic.")
-    if previous_start < data.sale_date.min():
-        st.warning("The previous period falls partly or entirely outside the available data range.")
+    st.caption("Country and category filters apply. Comparison periods are independent of the overview date range. Changes show the current period minus the baseline period.")
+    if selected == baseline:
+        st.info("Both selections refer to the same period.")
+    if any(a < data.sale_date.min() or b > data.sale_date.max() for a, b in [(start, end), (previous_start, previous_end)]):
+        st.warning("A selected period extends beyond the available data range; its totals may be incomplete.")
     metrics(current, previous)
     if previous.revenue.sum() == 0:
         st.caption("Percentage change is unavailable when previous revenue is zero.")
