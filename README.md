@@ -1,8 +1,22 @@
 # Sales Intelligence — Analysis Automation
 
-A Python business intelligence project that turns sales records into an interactive dashboard, period comparisons, and validated AI-assisted reports.
+A live business intelligence application for exploring sales performance, comparing periods, and reading validated AI-assisted reports. The dashboard is available online through Streamlit Community Cloud and reads published sales data and reports from an online **Neon PostgreSQL** database.
+
+**[Open the live application](https://analysisautomation.streamlit.app/)**
+
+Use the hosted app directly in your browser without installing Python or configuring database credentials. You can also clone the project and run your own copy locally, including an offline dashboard using CSV data.
 
 The project combines **Streamlit**, **Plotly**, **pandas**, **Neon PostgreSQL**, and an **OpenAI-powered reporting pipeline**. A separate Windows/Node-RED workflow can schedule report generation.
+
+## Choose how to use it
+
+| Mode | Data source | What you need |
+| --- | --- | --- |
+| Online app | Published sales snapshot and reports in Neon PostgreSQL | A browser and an internet connection |
+| Local offline dashboard | Bundled CSV or your own compatible CSV, plus any saved AI output | Python and installed dependencies; select **CSV** in the sidebar |
+| Local dashboard with cloud data | Your configured Neon PostgreSQL database | Python, an internet connection, and your own database credentials |
+
+The offline dashboard runs on your computer and opens in your browser. After downloading the repository and installing dependencies, its CSV charts, filters, comparisons, and exports work without a database connection or an OpenAI API key. Generating fresh AI reports requires internet access and an OpenAI API key; the cloud reporting pipeline also requires a database connection.
 
 ## What it does
 
@@ -38,7 +52,7 @@ The dashboard does not call the AI API or import sales into the database. In Neo
 
 CSV mode is a separate local preview using the bundled `sales_data_v2` file and previously saved AI output. The saved AI output is not guaranteed to describe that CSV or the current filters.
 
-## Quick start: dashboard
+## Run your own copy locally
 
 Use a Python environment compatible with the versions in `requirements-dashboard.txt`.
 
@@ -60,7 +74,7 @@ Activate the environment:
 source .venv/bin/activate
 ```
 
-Install dependencies and start the app:
+Install dependencies while connected to the internet, then start the app:
 
 ```bash
 python -m pip install -r requirements.txt
@@ -70,6 +84,10 @@ python -m streamlit run streamlit_app.py
 Open the local address printed by Streamlit, normally `http://localhost:8501`.
 
 **To explore without a database or AI credentials:** select **CSV** in the sidebar. The initial default is Neon PostgreSQL; an unconfigured database may show an error until CSV is selected. The CSV file has no `.csv` extension, but contains CSV data.
+
+For subsequent offline sessions, activate the same environment and run `python -m streamlit run streamlit_app.py`, then select **CSV** again. Keep the local Streamlit process running while you use the dashboard.
+
+To explore your own data, replace the contents of `sales_data_v2` in your local copy with a CSV using the columns listed below. Keep the filename unchanged. Dates must be parseable, quantities must be whole numbers, and quantities and revenue must be finite numeric values with no missing required fields. Revenue is displayed as EUR. Previously saved AI commentary is not regenerated when you change the CSV.
 
 ## Dashboard views
 
@@ -83,7 +101,9 @@ Comparisons use the selected end date as their anchor; the start-date filter doe
 
 Neon publications are checked every 60 seconds while the dashboard session is open. CSV data uses a five-minute cache. **Refresh data** clears the data caches; it does not start a report or AI request.
 
-## Database configuration
+## Connect your own database (optional)
+
+The public online app already has its cloud database configured. The following settings are only needed when connecting your own local or hosted copy to a database; CSV mode does not require them.
 
 For local use, create an untracked `.env` file in the project directory:
 
@@ -146,7 +166,9 @@ The schedule requires the machine to be awake and the configured Node-RED proces
 
 The root README describes the current implementation. Some older notes in `node_red/README.md` refer to earlier defaults; check the current `REFRESH_AI_RESPONSE` flag and the publication behaviour described above.
 
-## Streamlit hosting
+## Deploy your own online version
+
+The existing application is available at **[analysisautomation.streamlit.app](https://analysisautomation.streamlit.app/)**. To host your own copy, use the configuration below.
 
 For an existing Streamlit Community Cloud account, select this repository, the `main` branch, and `streamlit_app.py` as the entry point. `requirements.txt` includes the dashboard dependencies. Add `DATABASE_URL` in the app's secrets settings to use Neon.
 
