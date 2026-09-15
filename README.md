@@ -2,7 +2,7 @@
 
 ## Node-RED automatizálás
 
-A napi riport minden nap 08:00-kor fut, budapesti idő szerint, ha a gép ébren van
+A napi riport minden nap 10:00-kor fut, budapesti idő szerint, ha a gép ébren van
 és a Node-RED fut. Node-RED és Streamlit bejelentkezéskor elindul.
 Szerkesztő: http://127.0.0.1:1880. Részletek: [node_red/README.md](node_red/README.md).
 
@@ -45,7 +45,7 @@ API- és tesztreferencia: https://docs.streamlit.io/develop/api-reference
 
 ## Közös napi dashboard-publikáció
 
-A meglévő Node-RED folyamat naponta 08:00-kor (Europe/Budapest) futtatja
+A meglévő Node-RED folyamat naponta 10:00-kor (Europe/Budapest) futtatja
 az elemzést. A gépnek ébren kell lennie. Az adatbetöltésnek a futás előtt
 be kell fejeződnie; a folyamat nem állít elő új értékesítési adatokat.
 
