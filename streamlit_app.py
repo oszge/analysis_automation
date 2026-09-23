@@ -91,6 +91,7 @@ with st.sidebar:
     st.caption("Published updates are checked every minute while this page is open. Refreshing does not trigger an AI request.")
 
 try:
+    
     publication = cached_publication() if source == "Neon PostgreSQL" else None
     st.session_state["publication_version"] = publication["published_at"] if publication else None
     if source == "Neon PostgreSQL":
