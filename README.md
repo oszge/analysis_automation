@@ -48,7 +48,7 @@ Atomic dashboard_publication snapshot in Neon
 Read-only Streamlit dashboard
 ```
 
-The dashboard does not call the AI API or import sales into the database. In Neon mode it reads the last successful publication, keeping charts and AI commentary tied to the same data snapshot. Dashboard filters change the charts and tables, but do not generate new AI commentary.
+The dashboard imports no sales into the database. In Neon mode it reads the last successful publication, keeping charts and saved AI commentary tied to the same data snapshot. Dashboard filters change the charts and tables, but do not generate new saved commentary. The Sales agent tab calls the OpenAI API only when a question is submitted.
 
 CSV mode is a separate local preview using the bundled `sales_data_v2` file and previously saved AI output. The saved AI output is not guaranteed to describe that CSV or the current filters.
 
@@ -132,6 +132,27 @@ The publisher creates/updates `dashboard_publication`; its database role needs t
 
 The existing `database.import_sales()` helper contains an author-specific Windows file path and appends records. Adapt it before use and avoid re-importing the same records unintentionally. The dashboard and scheduled report do not perform this import automatically.
 
+## Ask the sales agent
+
+The dashboard's **Sales agent** tab uses the selected data source: the bundled `sales_data_v2` CSV or the latest published sales snapshot in Neon PostgreSQL. Questions use the full source dataset; sidebar country, category, and date filters do not apply. It compares a requested month with the previous month and can inspect category, country, or product changes. It reads data only and does not update the database or regenerate the saved report.
+
+For the public Streamlit app, set these root-level secrets in the app settings:
+
+```toml
+OPENAI_API_KEY = "your-api-key"
+AGENT_ACCESS_CODE = "a-long-private-access-code"
+```
+
+Keep the access code private. Without both secrets, the agent is unavailable, while the rest of the dashboard remains usable. Each submitted question may make multiple billable API calls. In Neon mode, answers use the last successful publication, not a live query against `sales_v2`.
+
+To run the same agent from the command line with the bundled CSV, install `python -m pip install -r requirements-agent.txt`, add `OPENAI_API_KEY` to your local `.env`, then run:
+
+```powershell
+python sales_agent.py "Miért változott a bevétel 2026-08-ban?"
+```
+
+Include the year and month (`YYYY-MM`) in the question. For a local dashboard, also set `AGENT_ACCESS_CODE` in `.env` and enter it in the Sales agent tab.
+
 ## Run the reporting pipeline
 
 The dashboard dependency file does not include the AI client packages. In the same environment, install:
@@ -172,7 +193,7 @@ The existing application is available at **[analysisautomation.streamlit.app](ht
 
 For an existing Streamlit Community Cloud account, select this repository, the `main` branch, and `streamlit_app.py` as the entry point. `requirements.txt` includes the dashboard dependencies. Add `DATABASE_URL` in the app's secrets settings to use Neon.
 
-The hosted dashboard requires a successful publication to exist in Neon mode. Hosting the dashboard does not host the Windows scheduler or generate reports; those run separately. The dashboard itself does not need an OpenAI API key.
+The hosted dashboard requires a successful publication to exist in Neon mode. Hosting the dashboard does not host the Windows scheduler or generate reports; those run separately. Only the optional Sales agent tab needs an OpenAI API key.
 
 ## Project structure
 

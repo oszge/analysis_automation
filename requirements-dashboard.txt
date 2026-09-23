@@ -5,3 +5,4 @@ numpy>=1.26,<3
 SQLAlchemy>=2,<3
 python-dotenv>=1,<2
 psycopg2-binary>=2.9,<3
+openai-agents

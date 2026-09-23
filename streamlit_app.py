@@ -1,13 +1,19 @@
 import json
+import hmac
+import os
 from datetime import datetime
 
 import pandas as pd
 import streamlit as st
+from dotenv import load_dotenv
+from streamlit.errors import StreamlitSecretNotFoundError
 
 from dashboard_data import BASE_DIR, load_sales, prepare_sales, segment_comparison, totals
 from published_report import read as read_publication
 from dashboard_style import apply_style, revenue_chart, ranking_chart, comparison_chart, show_chart
+from sales_agent import ask_sales
 
+load_dotenv()
 st.set_page_config(page_title="Sales Intelligence", page_icon="📊", layout="wide")
 apply_style()
 
@@ -85,7 +91,7 @@ with st.sidebar:
     st.html('<div class="brand"><span class="brand-mark">◈</span> INTELLIGENCE</div>')
     st.header("Data & filters")
     source = st.radio("Data source", ["Neon PostgreSQL", "CSV"],
-                      help="CSV uses the local sales_data file, not the live database.")
+                      help="CSV uses the local sales_data_v2 file, not the live database.")
     if st.button("Refresh data", width="stretch"):
         cached_sales.clear()
         cached_publication.clear()
@@ -152,7 +158,7 @@ filtered = segment[segment.sale_date.between(pd.Timestamp(dates[0]), pd.Timestam
 st.html(f'''<div class="source-line"><span>Source: {source}</span>
 <span>Latest data: {data.sale_date.max():%Y-%m-%d}</span><span>Currency: EUR (€)</span></div>''')
 
-overview, trends, ai_tab = st.tabs(["Overview", "Weekly & monthly comparison", "AI analysis"])
+overview, trends, ai_tab, agent_tab = st.tabs(["Overview", "Weekly & monthly comparison", "AI analysis", "Sales agent"])
 
 with overview:
     today = pd.Timestamp.now(tz="Europe/Budapest").tz_localize(None).normalize()
@@ -226,7 +232,7 @@ with ai_tab:
         st.caption(f"Published: {publication['published_at']} · Analysis and charts use the same saved dataset. Filters do not regenerate AI analysis.")
     else:
         st.warning("Local saved analysis may not match the selected CSV data.")
-    st.caption("The dashboard does not trigger AI requests or run the report generation pipeline.")
+    st.caption("This saved report does not trigger AI requests. The Sales agent tab runs on demand.")
     ai_path = BASE_DIR / "ai_response.json"
     try:
         saved = publication["payload"]["analysis"] if publication else json.loads(ai_path.read_text(encoding="utf-8"))
@@ -252,3 +258,37 @@ with ai_tab:
     elif report_path.is_file():
         st.download_button("Download saved report", report_path.read_bytes(),
                            report_path.name, "text/markdown")
+
+with agent_tab:
+    st.subheader("Ask the sales agent")
+    st.caption(f"Data source: {source}. Questions use the full selected dataset; sidebar filters do not apply. Each submission calls the OpenAI API.")
+    try:
+        access_code = st.secrets.get("AGENT_ACCESS_CODE") or os.getenv("AGENT_ACCESS_CODE")
+    except (FileNotFoundError, StreamlitSecretNotFoundError):
+        access_code = os.getenv("AGENT_ACCESS_CODE")
+
+    if not access_code:
+        st.info("Set AGENT_ACCESS_CODE in app secrets to enable the agent.")
+    elif not hmac.compare_digest(st.text_input("Access code", type="password"), access_code):
+        st.caption("Enter the access code to ask a question.")
+    elif not os.getenv("OPENAI_API_KEY"):
+        st.info("Set OPENAI_API_KEY in app secrets to enable AI requests.")
+    else:
+        with st.form("sales_agent_question"):
+            question = st.text_input("Question", placeholder="How did revenue change in 2026-08 by category?")
+            submitted = st.form_submit_button("Ask agent", type="primary")
+        if submitted:
+            st.session_state.pop("sales_agent_answer", None)
+            if not question.strip():
+                st.warning("Enter a question first.")
+            else:
+                try:
+                    with st.spinner("Analyzing sales…"):
+                        answer = ask_sales(question, data, source)
+                    st.session_state["sales_agent_answer"] = (source, loaded_at, question, answer)
+                except Exception:
+                    st.error("The agent request failed. Check the API key and try again.")
+        saved_answer = st.session_state.get("sales_agent_answer")
+        if saved_answer and saved_answer[:2] == (source, loaded_at):
+            st.caption(saved_answer[2])
+            st.markdown(saved_answer[3])
