@@ -1,5 +1,3 @@
-"""Shared platinum theme and interactive chart styling."""
-
 from pathlib import Path
 
 import plotly.graph_objects as go

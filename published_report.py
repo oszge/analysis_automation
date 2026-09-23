@@ -1,4 +1,3 @@
-"""Atomic publication of matching sales data and validated AI output in Neon."""
 import json
 from sqlalchemy import text
 

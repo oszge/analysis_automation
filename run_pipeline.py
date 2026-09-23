@@ -1,4 +1,4 @@
-"""Node-RED entry point: fixed environment, timeout, run log and overlap lock."""
+##NODE-RED
 from datetime import datetime, timezone
 import json
 import msvcrt

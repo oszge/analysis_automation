@@ -1,5 +1,3 @@
-"""Start with: python -m streamlit run streamlit_app.py"""
-
 import json
 from datetime import datetime
 
@@ -80,8 +78,7 @@ def display_table(frame, *, hide_index=False):
 
 
 st.html('''<div class="hero"><div><div class="eyebrow">SALES INTELLIGENCE / OVERVIEW</div>
-<h1>Business Intel<span style="color:#9bb1c5">.</span></h1>
-<p>Clear performance. Informed decisions.</p></div>''')
+<h1>Business Intel<span style="color:#9bb1c5">.</span></h1></div>''')
 
 with st.sidebar:
     st.html('<div class="brand"><span class="brand-mark">◈</span> INTELLIGENCE</div>')
