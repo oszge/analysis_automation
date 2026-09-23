@@ -140,10 +140,9 @@ For the public Streamlit app, set these root-level secrets in the app settings:
 
 ```toml
 OPENAI_API_KEY = "your-api-key"
-AGENT_ACCESS_CODE = "a-long-private-access-code"
 ```
 
-Keep the access code private. Without both secrets, the agent is unavailable, while the rest of the dashboard remains usable. Each submitted question may make multiple billable API calls. In Neon mode, answers use the last successful publication, not a live query against `sales_v2`.
+Without this secret, the agent is unavailable, while the rest of the dashboard remains usable. The dashboard is public, so anyone can submit questions that may make multiple billable API calls with this key. In Neon mode, answers use the last successful publication, not a live query against `sales_v2`.
 
 To run the same agent from the command line with the bundled CSV, install `python -m pip install -r requirements-agent.txt`, add `OPENAI_API_KEY` to your local `.env`, then run:
 
@@ -151,7 +150,7 @@ To run the same agent from the command line with the bundled CSV, install `pytho
 python sales_agent.py "Miért változott a bevétel 2026-08-ban?"
 ```
 
-Include the year and month (`YYYY-MM`) in the question. For a local dashboard, also set `AGENT_ACCESS_CODE` in `.env` and enter it in the Sales agent tab.
+Include the year and month (`YYYY-MM`) in the question.
 
 ## Run the reporting pipeline
 

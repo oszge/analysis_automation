@@ -1,12 +1,10 @@
 import json
-import hmac
 import os
 from datetime import datetime
 
 import pandas as pd
 import streamlit as st
 from dotenv import load_dotenv
-from streamlit.errors import StreamlitSecretNotFoundError
 
 from dashboard_data import BASE_DIR, load_sales, prepare_sales, segment_comparison, totals
 from published_report import read as read_publication
@@ -261,16 +259,7 @@ with ai_tab:
 with agent_tab:
     st.subheader("Ask the sales agent")
     st.caption(f"Data source: {source}. Questions use the full selected dataset; sidebar filters do not apply. Each submission calls the OpenAI API.")
-    try:
-        access_code = st.secrets.get("AGENT_ACCESS_CODE") or os.getenv("AGENT_ACCESS_CODE")
-    except (FileNotFoundError, StreamlitSecretNotFoundError):
-        access_code = os.getenv("AGENT_ACCESS_CODE")
-
-    if not access_code:
-        st.info("Set AGENT_ACCESS_CODE in app secrets to enable the agent.")
-    elif not hmac.compare_digest(st.text_input("Access code", type="password"), access_code):
-        st.caption("Enter the access code to ask a question.")
-    elif not os.getenv("OPENAI_API_KEY"):
+    if not os.getenv("OPENAI_API_KEY"):
         st.info("Set OPENAI_API_KEY in app secrets to enable AI requests.")
     else:
         with st.form("sales_agent_question"):
