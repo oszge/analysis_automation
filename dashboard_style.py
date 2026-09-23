@@ -3,7 +3,7 @@ from pathlib import Path
 import plotly.graph_objects as go
 import streamlit as st
 
-PALETTE = ["#286a73", "#477d85", "#638d93", "#799da2", "#91a6aa", "#41666d"]
+PALETTE = ["#167c89", "#33919b", "#59a2a9", "#78adb2", "#91a6aa", "#416e76"]
 
 
 def apply_style():
@@ -31,11 +31,11 @@ def revenue_chart(series):
     # Identical geometry on each layer: the halo never changes the data curve.
     for width, opacity in [(14, 0.025), (8, 0.055), (4, 0.12)]:
         fig.add_trace(go.Scatter(x=series.index, y=series.values, mode="lines",
-                                line=dict(color=f"rgba(40,106,115,{opacity})", width=width),
+                                line=dict(color=f"rgba(22,124,137,{opacity})", width=width),
                                 name="Revenue glow", hoverinfo="skip", showlegend=False))
     fig.add_trace(go.Scatter(
         x=series.index, y=series.values, mode="lines", name="Revenue (EUR)",
-        line=dict(color="#286a73", width=2.5), fill="tozeroy", fillcolor="rgba(40,106,115,0.12)",
+        line=dict(color="#167c89", width=2.5), fill="tozeroy", fillcolor="rgba(22,124,137,0.12)",
         hovertemplate="%{x|%Y. %m. %d.}<br><b>%{y:,.2f} €</b><extra>Revenue</extra>",
         showlegend=False,
     ))
@@ -51,7 +51,7 @@ def ranking_chart(ranking):
     # A translucent wider bar is a visual halo; the foreground bar remains the data.
     fig.add_trace(go.Bar(
         x=values.values, y=values.index, orientation="h",
-        marker=dict(color="rgba(40,106,115,0.05)", line=dict(color="rgba(40,106,115,0.08)", width=5)),
+        marker=dict(color="rgba(22,124,137,0.05)", line=dict(color="rgba(22,124,137,0.08)", width=5)),
         name="Revenue glow", hoverinfo="skip", showlegend=False,
     ))
     fig.add_trace(go.Bar(
@@ -69,7 +69,7 @@ def ranking_chart(ranking):
 
 def comparison_chart(comparison):
     fig = go.Figure()
-    for label, color, glow in [("Current revenue (EUR)", "#286a73", "rgba(40,106,115,0.08)"),
+    for label, color, glow in [("Current revenue (EUR)", "#167c89", "rgba(22,124,137,0.08)"),
                                ("Previous revenue (EUR)", "#adb8bd", "rgba(135,150,156,0.07)")]:
         # Soft translucent underlay creates a restrained platinum glow around each bar.
         fig.add_trace(go.Bar(x=comparison.index, y=comparison[label], name=label + " glow",
