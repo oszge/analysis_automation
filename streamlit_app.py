@@ -82,7 +82,7 @@ def display_table(frame, *, hide_index=False):
 
 
 st.html('''<div class="hero"><div class="eyebrow">SALES INTELLIGENCE</div>
-<h1>Business Intel<span style="color:#8c6dda">.</span></h1></div>''')
+<h1>Business Intel<span style="color:#67dce7">.</span></h1></div>''')
 
 with st.sidebar:
     st.html('<div class="brand"><span class="brand-mark">◈</span> INTELLIGENCE</div>')
