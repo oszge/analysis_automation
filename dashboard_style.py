@@ -3,7 +3,7 @@ from pathlib import Path
 import plotly.graph_objects as go
 import streamlit as st
 
-PALETTE = ["#8cabc4", "#a6b6d0", "#9ebdb9", "#bab2cc", "#c6baa7", "#aab6c4"]
+PALETTE = ["#8067d0", "#9a80d9", "#ae9bcf", "#8277aa", "#b6a9c7", "#71629d"]
 
 
 def apply_style():
@@ -15,27 +15,27 @@ def chart_layout(fig, height=340):
     fig.update_layout(
         template="plotly_white", height=height,
         paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-        font=dict(family="-apple-system, BlinkMacSystemFont, Segoe UI, sans-serif", size=12, color="#596a7c"),
+        font=dict(family="-apple-system, BlinkMacSystemFont, Segoe UI, sans-serif", size=12, color="#625e72"),
         margin=dict(l=18, r=24, t=28, b=24),
-        hoverlabel=dict(bgcolor="#ffffff", bordercolor="#cbd8e3", font_color="#273a4d"),
+        hoverlabel=dict(bgcolor="#faf8ff", bordercolor="#c6b6e8", font_color="#302b40"),
         legend=dict(orientation="h", y=1.14, x=0, title=None),
         colorway=PALETTE, bargap=0.38,
     )
     fig.update_xaxes(showgrid=False, zeroline=False, title=None, tickfont_size=11)
-    fig.update_yaxes(gridcolor="rgba(151,170,189,0.16)", zeroline=False, title=None, tickfont_size=11)
+    fig.update_yaxes(gridcolor="rgba(128,109,160,0.14)", zeroline=False, title=None, tickfont_size=11)
     return fig
 
 
 def revenue_chart(series):
     fig = go.Figure()
     # Identical geometry on each layer: the halo never changes the data curve.
-    for width, opacity in [(10, 0.035), (7, 0.055), (4, 0.09)]:
+    for width, opacity in [(14, 0.025), (8, 0.055), (4, 0.12)]:
         fig.add_trace(go.Scatter(x=series.index, y=series.values, mode="lines",
-                                line=dict(color=f"rgba(103,151,189,{opacity})", width=width),
+                                line=dict(color=f"rgba(147,102,238,{opacity})", width=width),
                                 name="Revenue glow", hoverinfo="skip", showlegend=False))
     fig.add_trace(go.Scatter(
         x=series.index, y=series.values, mode="lines", name="Revenue (EUR)",
-        line=dict(color="#739bbd", width=2.3), fill="tozeroy", fillcolor="rgba(150,182,207,0.10)",
+        line=dict(color="#795bd0", width=2.5), fill="tozeroy", fillcolor="rgba(158,121,230,0.12)",
         hovertemplate="%{x|%Y. %m. %d.}<br><b>%{y:,.2f} €</b><extra>Revenue</extra>",
         showlegend=False,
     ))
@@ -51,7 +51,7 @@ def ranking_chart(ranking):
     # A translucent wider bar is a visual halo; the foreground bar remains the data.
     fig.add_trace(go.Bar(
         x=values.values, y=values.index, orientation="h",
-        marker=dict(color="rgba(125,164,194,0.06)", line=dict(color="rgba(125,164,194,0.06)", width=4)),
+        marker=dict(color="rgba(143,109,220,0.05)", line=dict(color="rgba(143,109,220,0.08)", width=5)),
         name="Revenue glow", hoverinfo="skip", showlegend=False,
     ))
     fig.add_trace(go.Bar(
@@ -62,17 +62,18 @@ def ranking_chart(ranking):
         hovertemplate="%{y}<br><b>%{x:,.2f} €</b><extra>Revenue</extra>",
     ))
     chart_layout(fig, max(280, len(values) * 36))
-    fig.update_xaxes(ticksuffix=" €", showgrid=True, gridcolor="rgba(151,170,189,0.16)")
+    fig.update_xaxes(ticksuffix=" €", showgrid=True, gridcolor="rgba(128,109,160,0.14)")
     fig.update_yaxes(showgrid=False, categoryorder="array", categoryarray=list(values.index))
     return fig
 
 
 def comparison_chart(comparison):
     fig = go.Figure()
-    for label, color in [("Current revenue (EUR)", "#91adc5"), ("Previous revenue (EUR)", "#c7cbd7")]:
+    for label, color, glow in [("Current revenue (EUR)", "#8067d0", "rgba(143,109,220,0.08)"),
+                               ("Previous revenue (EUR)", "#b5b4c4", "rgba(135,130,158,0.07)")]:
         # Soft translucent underlay creates a restrained platinum glow around each bar.
         fig.add_trace(go.Bar(x=comparison.index, y=comparison[label], name=label + " glow",
-                             marker=dict(color="rgba(145,173,197,0.06)", line=dict(color="rgba(145,173,197,0.07)", width=4)),
+                             marker=dict(color=glow, line=dict(color=glow, width=5)),
                              hoverinfo="skip", showlegend=False, offsetgroup=label))
         fig.add_trace(go.Bar(x=comparison.index, y=comparison[label], name=label,
                              marker=dict(color=color, line=dict(color="#ffffff", width=1)),
