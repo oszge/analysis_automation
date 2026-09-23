@@ -15,8 +15,8 @@ def chart_layout(fig, height=340):
     fig.update_layout(
         template="plotly_white", height=height,
         paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-        font=dict(family="Segoe UI, sans-serif", size=12, color="#596a7c"),
-        margin=dict(l=12, r=24, t=24, b=20),
+        font=dict(family="-apple-system, BlinkMacSystemFont, Segoe UI, sans-serif", size=12, color="#596a7c"),
+        margin=dict(l=18, r=24, t=28, b=24),
         hoverlabel=dict(bgcolor="#ffffff", bordercolor="#cbd8e3", font_color="#273a4d"),
         legend=dict(orientation="h", y=1.14, x=0, title=None),
         colorway=PALETTE, bargap=0.38,

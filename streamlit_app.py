@@ -77,8 +77,9 @@ def display_table(frame, *, hide_index=False):
     st.dataframe(display, column_config=column_config, hide_index=hide_index, width="stretch")
 
 
-st.html('''<div class="hero"><div><div class="eyebrow">SALES INTELLIGENCE / OVERVIEW</div>
-<h1>Business Intel<span style="color:#9bb1c5">.</span></h1></div>''')
+st.html('''<div class="hero"><div class="eyebrow">SALES INTELLIGENCE</div>
+<h1>Business Intel<span style="color:#9bb1c5">.</span></h1>
+<p>Sales performance, clearly presented.</p></div>''')
 
 with st.sidebar:
     st.html('<div class="brand"><span class="brand-mark">◈</span> INTELLIGENCE</div>')
@@ -148,7 +149,8 @@ if len(dates) != 2:
     st.info("Select both a start date and an end date.")
     st.stop()
 filtered = segment[segment.sale_date.between(pd.Timestamp(dates[0]), pd.Timestamp(dates[1]))]
-st.caption(f"Source: {source} · Latest data: {data.sale_date.max():%Y-%m-%d} · Currency: EUR (€)")
+st.html(f'''<div class="source-line"><span>Source: {source}</span>
+<span>Latest data: {data.sale_date.max():%Y-%m-%d}</span><span>Currency: EUR (€)</span></div>''')
 
 overview, trends, ai_tab = st.tabs(["Overview", "Weekly & monthly comparison", "AI analysis"])
 
