@@ -1,5 +1,6 @@
 import json
 import os
+import re
 from datetime import datetime
 
 import pandas as pd
@@ -133,6 +134,9 @@ except Exception as exc:
         st.warning(str(exc))
     elif isinstance(exc, ValueError) and str(exc).startswith("Missing columns: "):
         st.warning("The sales table is missing one or more required columns: sale_date, product, category, country, quantity, revenue.")
+    missing_module = getattr(exc, "name", None) if isinstance(exc, ModuleNotFoundError) else None
+    if missing_module and re.fullmatch(r"[A-Za-z_][A-Za-z_0-9.]*", missing_module):
+        st.caption(f"Missing module: {missing_module}")
     st.code(f"Error type: {error_type}" + (f" | SQLSTATE: {sqlstate}" if sqlstate else ""))
     st.stop()
 
